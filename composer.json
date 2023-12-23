@@ -1,0 +1,22 @@
+{
+    "name": "ultra/ultra",
+    "type": "library",
+    "description": "Ultra",
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/dlsrc/ultra"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Dmitry Lebedev",
+            "email": "dl@adios.ru",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.3"
+    }
+}
