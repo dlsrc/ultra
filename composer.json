@@ -1,7 +1,7 @@
 {
     "name": "ultra/core",
     "type": "library",
-    "description": "Ultra is a library of tools that offers an alternative, modern approach to PHP application development. This package is the main part of Ultra.",
+    "description": "This package is a core part of the Ultra library.",
     "license": "MIT",
     "repositories": [
         {
