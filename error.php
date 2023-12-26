@@ -152,12 +152,22 @@ final readonly class Error implements CallableState, Valuable {
 
 			return $value;
 		}
+		elseif (0 == $previous->line || "" == $previous->file) {
+			$trace = \debug_backtrace();
 
-		$state = [
-			'errno' => $previous->type->value,
-			'file'  => $previous->file,
-			'line'  => $previous->line,
-		];
+			$state = [
+				'errno' => $previous->type->value,
+				'file'  => $trace[0]['file'],
+				'line'  => $trace[0]['line'],
+			];
+		}
+		else {
+			$state = [
+				'errno' => $previous->type->value,
+				'file'  => $previous->file,
+				'line'  => $previous->line,
+			];
+		}
 
 		$state['id'] = Log::makeId($state);
 		$log = Log::get();

@@ -18,12 +18,12 @@ readonly class Fail implements Valuable {
 	use Suspense;
 
 	final public function __construct(
-		public Condition $type,
-		public string $message,
-		public string $file,
-		public int $line,
-		public array|null $trace = null,
-		bool $report_to_core = false,
+		public  Condition $type,
+		public     string $message,
+		public     string $file           = "",
+		public        int $line           = 0,
+		public array|null $trace          = null,
+		             bool $report_to_core = false,
 	) {
 		if ($report_to_core) {
 			Core::get->registerFailure($this);
