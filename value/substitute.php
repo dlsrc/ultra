@@ -14,7 +14,7 @@ namespace ultra;
  * Экземпляры класса содержат в себе ссылку на породжающий интерфейс.
  * Класс использует для имплементации интерфейса \ultra\Valuable типаж ultra\Wrapper.
  */
-final class Substitute implements Valuable {
+class Substitute implements Valuable {
 	use Wrapper;
 
 	/**
@@ -23,7 +23,7 @@ final class Substitute implements Valuable {
 	 */
 	public readonly Valuable $previous;
 
-	public function __construct(mixed $value, Valuable $previous) {
+	final public function __construct(mixed $value, Valuable $previous) {
 		$this->_value = $value;
 		$this->previous = $previous;
 	}

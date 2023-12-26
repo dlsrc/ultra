@@ -10,10 +10,10 @@ namespace ultra;
  * Стандартная обёртка для валидных значений любых типов.
  * Класс использует для имплементации интерфейса \ultra\Valuable типаж ultra\Wrapper.
  */
-final class Value implements Valuable {
+class Value implements Valuable {
 	use Wrapper;
 
-	public function __construct(mixed $value) {
+	final public function __construct(mixed $value) {
 		$this->_value = $value;
 	}
 }

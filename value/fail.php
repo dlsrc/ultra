@@ -14,10 +14,10 @@ namespace ultra;
  * состояние.
  * Класс использует для имплементации интерфейса ultra\Valuable типаж ultra\Suspense.
  */
-final readonly class Fail implements Valuable {
+readonly class Fail implements Valuable {
 	use Suspense;
 
-	public function __construct(
+	final public function __construct(
 		public Condition $type,
 		public string $message,
 		public string $file,
