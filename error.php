@@ -233,6 +233,9 @@ final readonly class Error implements CallableState, Valuable {
 						elseif (\is_string($trace[$i]['args'][$id])) {
 							$trace[$i]['args'][$id] = '""';
 						}
+						elseif (\is_array($trace[$i]['args'][$id])) {
+							$trace[$i]['args'][$id] = 'array()';
+						}
 					}
 					elseif (\is_bool($trace[$i]['args'][$id])) {
 						$trace[$i]['args'][$id] = 'true';
@@ -246,6 +249,16 @@ final readonly class Error implements CallableState, Valuable {
 						}
 						else {
 							$trace[$i]['args'][$id] = $trace[$i]['args'][$id]::class;
+						}
+					}
+					elseif (\is_array($trace[$i]['args'][$id])) {
+						$count = \count($trace[$i]['args'][$id]);
+
+						if ($count > 5) {
+							$trace[$i]['args'][$id] = 'array(with '.$count.' elements)';
+						}
+						else {
+							$trace[$i]['args'][$id] = \str_replace("\n", ' ', \var_export($trace[$i]['args'][$id], true));
 						}
 					}
 				}

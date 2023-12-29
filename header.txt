@@ -1,10 +1,11 @@
 /**
-    (c) 2005-{1} Dmitry Lebedev <dl@adios.ru>
-    ----------------------------------------------------------------------------------------
-    This source code is part of the Ultra package core library.
-    Please see the LICENSE file for copyright and licensing information.
-    ----------------------------------------------------------------------------------------
-    {0}
-    ----------------------------------------------------------------------------------------
-    PHP {3}                                                 Last update: {2}
+ *  (c) 2005-{1} Dmitry Lebedev <dl@adios.ru>
+ *  ----------------------------------------------------------------------------------------
+ *  This source code was generated and exported to this file using the Ultra core library.
+ *  For copyright and licensing information for Ultra core library, see the LICENSE file at
+ *  https://github.com/dlsrc/ultra
+ *  ----------------------------------------------------------------------------------------
+ *  {0}
+ *  ----------------------------------------------------------------------------------------
+ *  PHP {3}                                                 Last update: {2}
  */
