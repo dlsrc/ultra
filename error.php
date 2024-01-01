@@ -64,6 +64,13 @@ final readonly class Error implements CallableState, Valuable {
 	public string $date;
 
 	/**
+	 * Вернуть текст сообщения об ошибке в контексте её появления: код ошибки, файл и строка вызова ошибки.
+	 */
+	public function getMessage(): string {
+		return \nl2br('Error code: #'.$this->errno.\PHP_EOL.'Message: '.$this->message.\PHP_EOL.'File: '.$this->file.\PHP_EOL.'Line: '.$this->line);
+	}
+
+	/**
 	 * Зарегистрировать новый объект ошибки в журнале и вернуть его.
 	 * $message - сообшение об ошибке;
 	 * $type    - Статус ошибки;
