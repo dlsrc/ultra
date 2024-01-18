@@ -22,6 +22,11 @@ final class Core implements Sociable {
 	public readonly bool $cli;
 
 	/**
+	 * Символ конца строки для CLI приложений в зависимости от платформы
+	 */
+	public readonly string $eol;
+
+	/**
 	 * Флаг расширения OPcache.
 	 * Если расширение OPcache загружено и активно, флаг устанавливается в TRUE, иначе FALSE.
 	 */
@@ -449,10 +454,12 @@ final class Core implements Sociable {
 	private function __construct() {
 		if ('cli' == PHP_SAPI) {
 			$this->cli = true;
+			$this->eol = PHP_EOL;
 			$this->opcache = ("1" == ini_get('opcache.enable_cli'));
 		}
 		else {
 			$this->cli = false;
+			$this->eol = "\n";
 			$this->opcache = ("1" == ini_get('opcache.enable'));
 		}
 

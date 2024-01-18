@@ -143,7 +143,7 @@ trait OwnExport {
 						$this->_file,
 						date('Y'),
 						date('Y-m-d H:i:s'),
-						\PHP_MAJOR_VERSION.'.'.\PHP_MINOR_VERSION
+						PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION
 					)
 				);
 			}

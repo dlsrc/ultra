@@ -67,11 +67,13 @@ final readonly class Error implements CallableState, Valuable {
 	 * Вернуть текст сообщения об ошибке в контексте её появления: код ошибки, файл и строка вызова ошибки.
 	 */
 	public function getMessage(): string {
+		$eol = Core::get()->eol;
+		
 		return nl2br(
-			'Error code: #'.$this->errno.\PHP_EOL.
-			'Message: '.$this->message.\PHP_EOL.
-			'File: '.$this->file.\PHP_EOL.
-			'Line: '.$this->line
+			'Error code: #'.$this->errno.$eol.
+			'Message:    '.$this->message.$eol.
+			'File:       '.$this->file.$eol.
+			'Line:       '.$this->line
 		);
 	}
 
@@ -113,7 +115,7 @@ final readonly class Error implements CallableState, Valuable {
 		}
 
 		$state['message'] = $message;
-		$state['context'] = '['.$type->name.' #'.$type->value.']'.\PHP_EOL.self::_prepareContext($trace);
+		$state['context'] = '['.$type->name.' #'.$type->value.']'."\n".self::_prepareContext($trace);
 
 		$error = new Error($state);
 		$log->addError($error, true);
@@ -204,7 +206,7 @@ final readonly class Error implements CallableState, Valuable {
 		$state['context'] = $context ?? '['.$previous->type->name.' #'.$previous->type->value.']';
 		
 		if (is_array($previous->trace)) {
-			$state['context'] = $state['context'].\PHP_EOL.self::_prepareContext($previous->trace);
+			$state['context'] = $state['context']."\n".self::_prepareContext($previous->trace);
 		}
 
 		$error = new Error($state);
@@ -226,7 +228,7 @@ final readonly class Error implements CallableState, Valuable {
 		}
 		
 		$context = '<- Error before or in the line '.$trace[0]['line'].
-		' in file "'.strtr($trace[0]['file'], '\\', '/').'"'.\PHP_EOL;
+		' in file "'.strtr($trace[0]['file'], '\\', '/').'"'."\n";
 
 		foreach (range(1, \array_key_last($trace)) as $i) {
 			if (empty($trace[$i]['args'])) {
@@ -277,7 +279,7 @@ final readonly class Error implements CallableState, Valuable {
 				$args = '('.implode(', ', $trace[$i]['args']).')';
 			}
 
-			$context = \PHP_EOL.\PHP_EOL.'  '.str_replace(\PHP_EOL, \PHP_EOL.'  ', $context).\PHP_EOL.'}';
+			$context = "\n\n".'  '.str_replace("\n", "\n".'  ', $context)."\n".'}';
 
 			if (!isset($trace[$i]['class'])) {
 				if (in_array($trace[$i]['function'], ['include', 'include_once', 'require', 'require_once'])) {
@@ -310,16 +312,16 @@ final readonly class Error implements CallableState, Valuable {
 			if (isset($trace[$i]['line'])) {
 				$context = '// '.$call.' on line '.$trace[$i]['line'].' in file "'.
 				(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
-				'"'.\PHP_EOL.$context;
+				'"'."\n".$context;
 			}
 			else {
 				$context = '// '.$call.' in file "'.
 				(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
-				'"'.\PHP_EOL.$context;
+				'"'."\n".$context;
 			}
 		}
 
-		return \PHP_EOL.$context;
+		return "\n".$context;
 	}
 
 	/**

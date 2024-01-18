@@ -90,11 +90,11 @@ final class Exporter implements Storable {
 	 */
 	private function _prepareHeader(string $header): string {
 		if (!str_starts_with($header, '/*')) {
-			$header = '/*'.\PHP_EOL.$header;
+			$header = '/*'."\n".$header;
 		}
 
 		if (!str_ends_with($header, '*/')) {
-			$header = $header.\PHP_EOL.'*/';
+			$header = $header."\n".'*/';
 		}
 
 		return $header;
@@ -106,11 +106,11 @@ final class Exporter implements Storable {
 	private function _makeCode(mixed $variable, string $header, bool $strict): string|null {
 		if ($code = $this->_optimize(var_export($variable, true), $this->_storable($variable))) {
 			if (Mode::Product->current() || '' == $header) {
-				$code = '<?php'.$this->_declare($strict).\PHP_EOL.'return '.$code.';'.\PHP_EOL;
+				$code = '<?php'.$this->_declare($strict)."\n".'return '.$code.';'."\n";
 			}
 			else {
-				$code = '<?php'.$this->_declare($strict).\PHP_EOL.$this->_prepareHeader($header).\PHP_EOL.
-				'return '.$code.';'.\PHP_EOL;
+				$code = '<?php'.$this->_declare($strict)."\n".$this->_prepareHeader($header)."\n".
+				'return '.$code.';'."\n";
 			}
 		}
 
@@ -126,10 +126,10 @@ final class Exporter implements Storable {
 		}
 		
 		if (Mode::Product->current() || '' == $header) {
-			return '<?php'.$this->_declare($strict).\PHP_EOL.$code.\PHP_EOL;
+			return '<?php'.$this->_declare($strict)."\n".$code."\n";
 		}
 
-		return '<?php'.$this->_declare($strict).\PHP_EOL.$this->_prepareHeader($header).\PHP_EOL.$code.\PHP_EOL;
+		return '<?php'.$this->_declare($strict)."\n".$this->_prepareHeader($header)."\n".$code."\n";
 	}
 
 	/**
