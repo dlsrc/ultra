@@ -50,7 +50,7 @@ class SetStateDirectly {
 			return false;
 		}
 
-		if (\count($p) > 1) {
+		if (count($p) > 1) {
 			for ($i = 1; isset($p[$i]); $i++) {
 				if (!$p[$i]->isDefaultValueAvailable()) {
 					return false;

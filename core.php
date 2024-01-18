@@ -6,6 +6,8 @@
  */
 namespace ultra;
 
+use Closure;
+
 final class Core implements Sociable {
 	use Informer;
 
@@ -82,17 +84,17 @@ final class Core implements Sociable {
 	 * Завершающая функция, вызываемая в случае фатальной ошибки.
 	 * В качестве аргумента функция может принимать сам объект фатальной ошибки.
 	 */
-	private \Closure|null $_error;
+	private Closure|null $_error;
 
 	/**
 	 * Завершающая функция, вызываемая в случае остановки по таймауту.
 	 */
-	private \Closure|null $_timeout;
+	private Closure|null $_timeout;
 
 	/**
 	 * Завершающая функция, вызываемая в случае прерывания исполнения.
 	 */
-	private \Closure|null $_aborted;
+	private Closure|null $_aborted;
 
 	/**
 	 * Флаг выполнения завершающей функции в случае прерывания пользователем исполнения
@@ -123,8 +125,8 @@ final class Core implements Sociable {
 	 * переменная были ранее сохранены и закешированы.
 	 */
 	public function invalidate(string $file): void {
-		if ($this->opcache && \is_file($file) && \opcache_is_script_cached($file)) {
-			\opcache_invalidate($file);
+		if ($this->opcache && is_file($file) && opcache_is_script_cached($file)) {
+			opcache_invalidate($file);
 		}
 	}
 
@@ -162,25 +164,25 @@ final class Core implements Sociable {
 	 * аргумента NULL.
 	 */
 	public function listen(
-		\Closure|null|true $error_handler     = true,
-		\Closure|null|true $exception_handler = true,
+		Closure|null|true $error_handler     = true,
+		Closure|null|true $exception_handler = true,
 	): self {
 		if (true === $error_handler) {
-			\set_error_handler($this->_errorHandler(...));
+			set_error_handler($this->_errorHandler(...));
 		}
 		else {
-			$prev = \set_error_handler($error_handler);
+			$prev = set_error_handler($error_handler);
 
-			if (\is_null($error_handler) && !\is_null($prev)) {
-				\error_clear_last();
+			if (is_null($error_handler) && !is_null($prev)) {
+				error_clear_last();
 			}
 		}
 
 		if (true === $exception_handler) {
-			\set_exception_handler($this->_exceptionHandler(...));
+			set_exception_handler($this->_exceptionHandler(...));
 		}
 		else {
-			\set_exception_handler($exception_handler);
+			set_exception_handler($exception_handler);
 		}
 
 		return $this;
@@ -191,11 +193,11 @@ final class Core implements Sociable {
 	 * Аналогично вызову $core->listen(NULL, NULL);.
 	 */
 	public function stopListen(): self {
-		$prev = \set_error_handler(null);
-		\set_exception_handler(null);
+		$prev = set_error_handler(null);
+		set_exception_handler(null);
 		
-		if (!\is_null($prev)) {
-			\error_clear_last();
+		if (!is_null($prev)) {
+			error_clear_last();
 		}
 
 		return $this;
@@ -209,7 +211,7 @@ final class Core implements Sociable {
 			return '';
 		}
 
-		if (!$header = \file_get_contents($this->_header)) {
+		if (!$header = file_get_contents($this->_header)) {
 			return '';
 		}
 
@@ -225,7 +227,7 @@ final class Core implements Sociable {
 				return $this;
 			}
 		}
-		elseif (!\is_readable($file)) {
+		elseif (!is_readable($file)) {
 			if ('' == $this->_header) {
 				return $this;
 			}
@@ -245,7 +247,7 @@ final class Core implements Sociable {
 			return $this->_logfile;
 		}
 
-		return \dirname(\realpath($_SERVER['SCRIPT_FILENAME'])).'/ultra_log.php';
+		return dirname(realpath($_SERVER['SCRIPT_FILENAME'])).'/ultra_log.php';
 	}
 
 	/**
@@ -292,7 +294,7 @@ final class Core implements Sociable {
 	public function logable(): bool {
 		if (
 			1 == $this->_frequency
-			|| \mt_rand(1, $this->_frequency) == $this->_frequency
+			|| mt_rand(1, $this->_frequency) == $this->_frequency
 			|| Mode::Develop->current()
 			|| $this->cli
 		) {
@@ -340,7 +342,7 @@ final class Core implements Sociable {
 		}
 
 		foreach ($log->getKeys() as $id) {
-			if (\in_array($log->getType($id), $type)) {
+			if (in_array($log->getType($id), $type)) {
 				return true;
 			}
 		}
@@ -376,9 +378,9 @@ final class Core implements Sociable {
 	}
 
 	public function shutdown(
-		\Closure|null $error   = null,
-		\Closure|null $timeout = null,
-		\Closure|null $aborted = null, bool $ignore = false,
+		Closure|null $error   = null,
+		Closure|null $timeout = null,
+		Closure|null $aborted = null, bool $ignore = false,
 	): self {
 		if (null != $error) {
 			$this->error($error);
@@ -395,19 +397,19 @@ final class Core implements Sociable {
 		return $this;
 	}
 
-	public function error(\Closure $error): self {
+	public function error(Closure $error): self {
 		$this->_shutdownStart();
 		$this->_error = $error;
 		return $this;
 	}
 
-	public function timeout(\Closure $timeout): self {
+	public function timeout(Closure $timeout): self {
 		$this->_shutdownStart();
 		$this->_timeout = $timeout;
 		return $this;
 	}
 
-	public function aborted(\Closure $aborted, bool $ignore = false): self {
+	public function aborted(Closure $aborted, bool $ignore = false): self {
 		$this->_shutdownStart();
 		$this->_aborted = $aborted;
 		$this->_ignore = $ignore;
@@ -416,13 +418,13 @@ final class Core implements Sociable {
 
 	private static function _init(): self {
 		$core = new Core;
-		\error_reporting(\E_ALL);
+		error_reporting(E_ALL);
 
-		if (!$e = \error_get_last()) {
+		if (!$e = error_get_last()) {
 			return $core;
 		}
 
-		$e['type']    ??= \E_WARNING;
+		$e['type']    ??= E_WARNING;
 		$e['message'] ??= 'Unknown last error before starting core error listener.';
 		$e['file']    ??= 'External source';
 		$e['line']    ??= 0;
@@ -445,13 +447,13 @@ final class Core implements Sociable {
 	}
 
 	private function __construct() {
-		if ('cli' == \PHP_SAPI) {
+		if ('cli' == PHP_SAPI) {
 			$this->cli = true;
-			$this->opcache = ("1" == \ini_get('opcache.enable_cli'));
+			$this->opcache = ("1" == ini_get('opcache.enable_cli'));
 		}
 		else {
 			$this->cli = false;
-			$this->opcache = ("1" == \ini_get('opcache.enable'));
+			$this->opcache = ("1" == ini_get('opcache.enable'));
 		}
 
 		$this->_logfile   = '';
@@ -472,12 +474,12 @@ final class Core implements Sociable {
 		}
 
 		if (null != $this->_aborted
-		&& 1 == \connection_aborted()
-		&& ($this->_ignore || !\ini_get('ignore_user_abort'))) {
+		&& 1 == connection_aborted()
+		&& ($this->_ignore || !ini_get('ignore_user_abort'))) {
 			($this->_aborted)();
 		}
 
-		if (null != $this->_timeout && \connection_status() > 1) {
+		if (null != $this->_timeout && connection_status() > 1) {
 			($this->_timeout)();
 		}
 	}
@@ -485,7 +487,7 @@ final class Core implements Sociable {
 	private function _shutdownStart(): void {
 		if (!$this->_shutdown) {
 			$this->_shutdown = true;
-			\register_shutdown_function($this->_shutdownHandler(...));
+			register_shutdown_function($this->_shutdownHandler(...));
 		}
 	}
 
@@ -514,7 +516,7 @@ final class Core implements Sociable {
 	 * Обработчик исключений.
 	 */
 	private function _exceptionHandler(\Throwable $ex): void {
-		if (\method_exists($ex, 'getSeverity')) {
+		if (method_exists($ex, 'getSeverity')) {
 			$code = (int) $ex->getSeverity();
 		}
 		else {
@@ -523,10 +525,10 @@ final class Core implements Sociable {
 
 		if (0 == $code) {
 			if ($ex instanceof \Error) {
-				$code = \E_ERROR;
+				$code = E_ERROR;
 			}
 			else {
-				$code = \E_WARNING;
+				$code = E_WARNING;
 			}
 		}
 

@@ -11,19 +11,19 @@ namespace ultra;
  */
 final class SysVSemMutex extends Mutex {
 	protected function create(): void {
-		$this->sem = \sem_get($this->key, 1, 0666, true);
+		$this->sem = sem_get($this->key, 1, 0666, true);
 		$this->status = false;
 	}
 
 	public function acquire(bool $blocking=false): bool {
 		if (!$this->status && $this->sem) {
 			if ($blocking) {
-				if (\sem_acquire($this->sem, false)) {
+				if (sem_acquire($this->sem, false)) {
 					$this->status = true;
 				}
 			}
 			else {
-				if (\sem_acquire($this->sem, true)) {
+				if (sem_acquire($this->sem, true)) {
 					$this->status = true;
 				}
 			}
@@ -34,7 +34,7 @@ final class SysVSemMutex extends Mutex {
 
 	public function release(): bool {
 		if ($this->status) {
-			if (\sem_release($this->sem)) {
+			if (sem_release($this->sem)) {
 				$this->status = false;
 				return true;
 			}
@@ -45,7 +45,7 @@ final class SysVSemMutex extends Mutex {
 
 	public function remove(): bool {
 		if ($this->status) {
-			if (\sem_remove($this->sem)) {
+			if (sem_remove($this->sem)) {
 				$this->status = false;
 				self::drop($this->key);
 				return true;

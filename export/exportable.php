@@ -141,8 +141,8 @@ trait OwnExport {
 					Core::message(
 						'src_header',
 						$this->_file,
-						\date('Y'),
-						\date('Y-m-d H:i:s'),
+						date('Y'),
+						date('Y-m-d H:i:s'),
 						\PHP_MAJOR_VERSION.'.'.\PHP_MINOR_VERSION
 					)
 				);
@@ -154,7 +154,7 @@ trait OwnExport {
 	}
 
 	final public function update(Save $save = Save::Now): self {
-		$type = \get_class($this);
+		$type = get_class($this);
 
 		if ($this instanceof Named) {
 			$name = $this->getName();
@@ -187,7 +187,7 @@ trait OwnExport {
 			}
 		}
 		else {
-			$name = \get_class($this);
+			$name = get_class($this);
 			self::drop($name);
 
 			if (!$refind = self::find($this->_file)) {

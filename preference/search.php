@@ -48,6 +48,6 @@ trait SearchingCase {
 			return false;
 		}
 
-		return \in_array($case, $cases);
+		return in_array($case, $cases);
 	}
 }

@@ -23,7 +23,7 @@ final class Log {
 		$errno = $trace['errno'] ?? '';
 		$file  = $trace['file']  ?? '';
 		$line  = $trace['line']  ?? '';
-		return \md5($errno.'::'.$file.'::'.$line);
+		return md5($errno.'::'.$file.'::'.$line);
 	}
 
 	public function __destruct() {
@@ -34,8 +34,8 @@ final class Log {
 		$core = Core::get();
 		$file = $core->getLogfile();
 
-		if (\is_file($file)) {
-			if (!$core->logable() || !\is_writable($file)) {
+		if (is_file($file)) {
+			if (!$core->logable() || !is_writable($file)) {
 				return;
 			}
 
@@ -60,9 +60,9 @@ final class Log {
 			Core::message(
 				'src_header',
 				'Error log: '.$file,
-				\date('Y'),
-				\date('Y-m-d H:i:s'),
-				\PHP_MAJOR_VERSION.'.'.\PHP_MINOR_VERSION
+				date('Y'),
+				date('Y-m-d H:i:s'),
+				PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION
 			)
 		);
 
@@ -70,7 +70,7 @@ final class Log {
 	}
 
 	public function getKeys(): array {
-		return \array_keys($this->_error);
+		return array_keys($this->_error);
 	}
 
 	public function exists(string $id): bool {
@@ -78,7 +78,7 @@ final class Log {
 	}
 
 	public function size(): int {
-		return \count($this->_error);
+		return count($this->_error);
 	}
 
 	public function addError(Error $e, bool $replace = false): void {
@@ -153,18 +153,18 @@ final class Log {
 		}
 
 		$this->refresh();
-		return \array_keys($this->_saved);
+		return array_keys($this->_saved);
 	}
 
 	private function loaded($file): bool {
-		if (\is_null($this->_saved)) {
-			if (!\is_readable($file)) {
+		if (is_null($this->_saved)) {
+			if (!is_readable($file)) {
 				return false;
 			}
 
 			$log = @include $file;
 
-			if (!\is_array($log) || empty($log)) {
+			if (!is_array($log) || empty($log)) {
 				$this->_saved = $this->_error;
 			}
 			else {
@@ -178,7 +178,7 @@ final class Log {
 	private function refresh(): bool {
 		$new = false;
 
-		foreach (\array_keys($this->_error) as $id) {
+		foreach (array_keys($this->_error) as $id) {
 			if (!isset($this->_saved[$id])
 				|| (Mode::Develop->current()
 					&& $this->_saved[$id]->context != $this->_error[$id]->context

@@ -38,8 +38,8 @@ trait PropertyGetterCall {
 	final public function __call(string $name, array $vars): mixed {
 		if (isset($this->_property[$name])) {
 			if (isset($vars[0])) {
-				return \str_replace(
-					\array_map(fn($key) => '{'.$key.'}', \array_keys($vars)),
+				return str_replace(
+					array_map(fn($key) => '{'.$key.'}', array_keys($vars)),
 					$vars,
 					$this->_property[$name]
 				);

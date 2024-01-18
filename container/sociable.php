@@ -22,8 +22,8 @@ trait Informer {
 			return self::_template($code);
 		}
 
-		return \str_replace(
-			\array_map(fn($text) => '{'.$text.'}', \array_keys($context)),
+		return str_replace(
+			array_map(fn($text) => '{'.$text.'}', array_keys($context)),
 			$context,
 			self::_template($code)
 		);
@@ -48,8 +48,8 @@ trait Informer {
 					return $this->_tpl;
 				}
 
-				return \str_replace(
-					\array_map(fn($text) => '{'.$text.'}', \array_keys($context)),
+				return str_replace(
+					array_map(fn($text) => '{'.$text.'}', array_keys($context)),
 					$context,
 					$this->_tpl
 				);
@@ -61,7 +61,7 @@ trait Informer {
 		$lang  = Lang::now();
 		$class = self::_langclass($lang);
 
-		if (\class_exists($class, false)) {
+		if (class_exists($class, false)) {
 			if ($info = self::_instance($class)) {
 				return $info;
 			}
@@ -75,9 +75,9 @@ trait Informer {
 			$def_class = self::_langclass($def);
 
 			if ($def_path = Boot::find($def_class, false)) {
-				$path = \str_replace($def->name.'.php', $lang->name.'.php', $def_path);
+				$path = str_replace($def->name.'.php', $lang->name.'.php', $def_path);
 					
-				if (\is_readable($path)) {
+				if (is_readable($path)) {
 					//include_once $path;
 
 					if ($info = self::_exists($class, true)) {
@@ -102,7 +102,7 @@ trait Informer {
 	}
 
 	private static function _instance(string $class): Immutable|null {
-		if (\is_subclass_of($class, 'ultra\\Immutable')) {
+		if (is_subclass_of($class, 'ultra\\Immutable')) {
 			$class_ref = new \ReflectionClass($class);
 
 			if ($class_ref->hasMethod('get')) {
@@ -130,7 +130,7 @@ trait Informer {
 	}
 
 	private static function _exists(string $class, bool $autoload): Immutable|null {
-		if (\class_exists($class, $autoload)) {
+		if (class_exists($class, $autoload)) {
 			return self::_instance($class);
 		}
 
@@ -173,11 +173,11 @@ trait Informer {
 	}
 
 	private static function _langclass(Lang $lang): string {
-		if (false === ($pos = \strrpos(self::class, '\\'))) {
+		if (false === ($pos = strrpos(self::class, '\\'))) {
 			return $lang->name.'\\'.self::class;
 		}
 		else {
-			return \substr(self::class, 0, $pos).'\\'.$lang->name.\strrchr(self::class, '\\');
+			return substr(self::class, 0, $pos).'\\'.$lang->name.strrchr(self::class, '\\');
 		}
 	}
 }

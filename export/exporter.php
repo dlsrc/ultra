@@ -73,7 +73,7 @@ final class Exporter implements Storable {
 			return false;
 		}
 
-		if (\str_contains($code, 'declare(strict_types=1);')) {
+		if (str_contains($code, 'declare(strict_types=1);')) {
 			$strict = false;
 		}
 
@@ -89,11 +89,11 @@ final class Exporter implements Storable {
 	 * Подготовка строки комментария для заголовка файла
 	 */
 	private function _prepareHeader(string $header): string {
-		if (!\str_starts_with($header, '/*')) {
+		if (!str_starts_with($header, '/*')) {
 			$header = '/*'.\PHP_EOL.$header;
 		}
 
-		if (!\str_ends_with($header, '*/')) {
+		if (!str_ends_with($header, '*/')) {
 			$header = $header.\PHP_EOL.'*/';
 		}
 
@@ -104,7 +104,7 @@ final class Exporter implements Storable {
 	 * Подготовить переменную к сохранению
 	 */
 	private function _makeCode(mixed $variable, string $header, bool $strict): string|null {
-		if ($code = $this->_optimize(\var_export($variable, true), $this->_storable($variable))) {
+		if ($code = $this->_optimize(var_export($variable, true), $this->_storable($variable))) {
 			if (Mode::Product->current() || '' == $header) {
 				$code = '<?php'.$this->_declare($strict).\PHP_EOL.'return '.$code.';'.\PHP_EOL;
 			}
@@ -121,7 +121,7 @@ final class Exporter implements Storable {
 	 * Подготовить исходный код к сохранению
 	 */
 	private function _prepareCode(string $code, string $header, bool $strict): string {
-		if (\str_starts_with($code, '<?php')) {
+		if (str_starts_with($code, '<?php')) {
 			return $code;
 		}
 		
@@ -151,8 +151,8 @@ final class Exporter implements Storable {
 		$direct = [];
 		$nocall = [];
 
-		if (\preg_match_all($seek, $code, $match)) {
-			$match = \array_unique($match[1]);
+		if (preg_match_all($seek, $code, $match)) {
+			$match = array_unique($match[1]);
 
 			foreach ($match as $name) {
 				switch ($this->_isExportable($name)) {
@@ -172,12 +172,12 @@ final class Exporter implements Storable {
 		}
 
 		if (!empty($direct)) {
-			$seek = '/('.\implode('|', \array_map(fn(string $text) => \preg_quote($text), $direct)).')::__set_state/is';
-			$code = \preg_replace($seek, 'new $1', $code);
+			$seek = '/('.\implode('|', \array_map(fn(string $text) => preg_quote($text), $direct)).')::__set_state/is';
+			$code = preg_replace($seek, 'new $1', $code);
 		}
 
 		if ($storable) {
-			$code = \preg_replace(
+			$code = preg_replace(
 				'/\'_file\'\s*\=>\s*\'[^\']+\'\,/', '\'_file\' => __FILE__,', $code
 			);
 		}
@@ -186,7 +186,7 @@ final class Exporter implements Storable {
 			return $code;
 		}
 
-		return \preg_replace(
+		return preg_replace(
 			['/\s+\=\>\s+/', '/\s*\(\n\s+/', '/\,\n\s*\)/', '/\,\n\s+/'],
 			['=>', '(', ')', ','],
 			$code
@@ -197,7 +197,7 @@ final class Exporter implements Storable {
 	 * Выявляет интерфейс ultra\Storable в экспортируемой переменной.
 	 */
 	private function _storable(mixed $variable): bool {
-		if (\is_object($variable) && ($variable instanceof Storable)) {
+		if (is_object($variable) && ($variable instanceof Storable)) {
 			return true;
 		}
 

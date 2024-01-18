@@ -33,7 +33,7 @@ trait NamedContainerGetter {
 		}
 
 		if (!isset(self::$_container[$name])) {
-			if (\is_subclass_of(static::class, 'ultra\\Named')) {
+			if (is_subclass_of(static::class, 'ultra\\Named')) {
 				self::$_container[$name] = new static([], $name);
 			}
 			else {
@@ -62,27 +62,27 @@ trait NamedContainer {
 			return self::$_container[$name];
 		}
 
-		if (\is_readable($file)) {
+		if (is_readable($file)) {
 			self::$_container[$name] = @include $file;
 
 			if (self::$_container[$name] instanceof static) {
 				return self::$_container[$name];
 			}
 
-			if (!\is_object(self::$_container[$name])) {
-				\unlink($file);
+			if (!is_object(self::$_container[$name])) {
+				unlink($file);
 				Error::log(
-					Core::message('e_type', $file, \gettype(self::$_container[$name])),
+					Core::message('e_type', $file, gettype(self::$_container[$name])),
 					Status::Domain
 				);
 			}
 			else {
-				\unlink($file);
+				unlink($file);
 				Error::log(
 					Core::message(
 						'e_class',
 						$file,
-						\get_class(self::$_container[$name]),
+						get_class(self::$_container[$name]),
 						static::class
 					),
 					Status::Domain
@@ -112,7 +112,7 @@ trait NamedContainer {
 			return self::$_container[$name];
 		}
 
-		if (!\is_readable($file)) {
+		if (!is_readable($file)) {
 			return null;
 		}
 

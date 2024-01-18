@@ -67,7 +67,12 @@ final readonly class Error implements CallableState, Valuable {
 	 * Вернуть текст сообщения об ошибке в контексте её появления: код ошибки, файл и строка вызова ошибки.
 	 */
 	public function getMessage(): string {
-		return \nl2br('Error code: #'.$this->errno.\PHP_EOL.'Message: '.$this->message.\PHP_EOL.'File: '.$this->file.\PHP_EOL.'Line: '.$this->line);
+		return nl2br(
+			'Error code: #'.$this->errno.\PHP_EOL.
+			'Message: '.$this->message.\PHP_EOL.
+			'File: '.$this->file.\PHP_EOL.
+			'Line: '.$this->line
+		);
 	}
 
 	/**
@@ -79,7 +84,7 @@ final readonly class Error implements CallableState, Valuable {
 	 * бессмысленно.
 	 */
 	public static function log(string $message, Condition $type = Status::User, bool $fatal = false): static {
-		$trace = \debug_backtrace();
+		$trace = debug_backtrace();
 
 		$state = [
 			'errno' => $type->value,
@@ -93,7 +98,7 @@ final readonly class Error implements CallableState, Valuable {
 		if ($log->exists($state['id'])) {
 			$error = $log->getError($state['id']);
 
-			if (\is_object($error) && $error::class == self::class) {
+			if (is_object($error) && $error::class == self::class) {
 				return $error;
 			}
 		}
@@ -108,8 +113,7 @@ final readonly class Error implements CallableState, Valuable {
 		}
 
 		$state['message'] = $message;
-		$state['context'] = '['.$type->name.' #'.$type->value.']'.
-		\PHP_EOL.self::_prepareContext($trace);
+		$state['context'] = '['.$type->name.' #'.$type->value.']'.\PHP_EOL.self::_prepareContext($trace);
 
 		$error = new Error($state);
 		$log->addError($error, true);
@@ -132,7 +136,7 @@ final readonly class Error implements CallableState, Valuable {
 	 */
 	public static function from(Valuable $value, string|null $context = null, bool $fatal = false): Valuable {
 		if ($value->valid()) {
-			if (\property_exists($value, 'previous')
+			if (property_exists($value, 'previous')
 			&& isset($value->previous)
 			&& ($value->previous instanceof Valuable)
 			) {
@@ -160,7 +164,7 @@ final readonly class Error implements CallableState, Valuable {
 			return $value;
 		}
 		elseif (0 == $previous->line || "" == $previous->file) {
-			$trace = \debug_backtrace();
+			$trace = debug_backtrace();
 
 			$state = [
 				'errno' => $previous->type->value,
@@ -182,7 +186,7 @@ final readonly class Error implements CallableState, Valuable {
 		if ($log->exists($state['id'])) {
 			$error = $log->getError($state['id']);
 
-			if (\is_object($error) && $error::class == self::class) {
+			if (is_object($error) && $error::class == self::class) {
 				return $value;
 			}
 		}
@@ -199,7 +203,7 @@ final readonly class Error implements CallableState, Valuable {
 		$state['message'] = $previous->message;
 		$state['context'] = $context ?? '['.$previous->type->name.' #'.$previous->type->value.']';
 		
-		if (\is_array($previous->trace)) {
+		if (is_array($previous->trace)) {
 			$state['context'] = $state['context'].\PHP_EOL.self::_prepareContext($previous->trace);
 		}
 
@@ -213,71 +217,71 @@ final readonly class Error implements CallableState, Valuable {
 	 */
 	private static function _prepareContext(array $trace): string {
 		if (!isset($trace[1])) {
-			if (\is_string($trace[0]['file'])) {
+			if (is_string($trace[0]['file'])) {
 				return 'Error before or in the line '.$trace[0]['line'].
-				' in file "'.\strtr($trace[0]['file'], '\\', '/').'"';
+				' in file "'.strtr($trace[0]['file'], '\\', '/').'"';
 			} else {
-				return 'Error trace '.\var_export($trace, true);
+				return 'Error trace '.var_export($trace, true);
 			}
 		}
 		
 		$context = '<- Error before or in the line '.$trace[0]['line'].
-		' in file "'.\strtr($trace[0]['file'], '\\', '/').'"'.\PHP_EOL;
+		' in file "'.strtr($trace[0]['file'], '\\', '/').'"'.\PHP_EOL;
 
-		foreach (\range(1, \array_key_last($trace)) as $i) {
+		foreach (range(1, \array_key_last($trace)) as $i) {
 			if (empty($trace[$i]['args'])) {
 				$args = '()';
 			}
 			else {
 				foreach ($trace[$i]['args'] as $id => $arg) {
 					if (empty($arg)) {
-						if (\is_bool($trace[$i]['args'][$id])) {
+						if (is_bool($trace[$i]['args'][$id])) {
 							$trace[$i]['args'][$id] = 'false';
 						}
-						elseif (\is_null($trace[$i]['args'][$id])) {
+						elseif (is_null($trace[$i]['args'][$id])) {
 							$trace[$i]['args'][$id] = 'null';
 						}
-						elseif (\is_string($trace[$i]['args'][$id])) {
+						elseif (is_string($trace[$i]['args'][$id])) {
 							$trace[$i]['args'][$id] = '""';
 						}
-						elseif (\is_array($trace[$i]['args'][$id])) {
+						elseif (is_array($trace[$i]['args'][$id])) {
 							$trace[$i]['args'][$id] = 'array()';
 						}
 					}
-					elseif (\is_bool($trace[$i]['args'][$id])) {
+					elseif (is_bool($trace[$i]['args'][$id])) {
 						$trace[$i]['args'][$id] = 'true';
 					}
-					elseif (\is_string($trace[$i]['args'][$id])) {
+					elseif (is_string($trace[$i]['args'][$id])) {
 						$trace[$i]['args'][$id] = '"'.$trace[$i]['args'][$id].'"';
 					}
-					elseif (\is_object($trace[$i]['args'][$id])) {
-						if (\is_subclass_of($trace[$i]['args'][$id], 'UnitEnum')) {
+					elseif (is_object($trace[$i]['args'][$id])) {
+						if (is_subclass_of($trace[$i]['args'][$id], 'UnitEnum')) {
 							$trace[$i]['args'][$id] = $trace[$i]['args'][$id]::class.'::'.$trace[$i]['args'][$id]->name;
 						}
 						else {
 							$trace[$i]['args'][$id] = $trace[$i]['args'][$id]::class;
 						}
 					}
-					elseif (\is_array($trace[$i]['args'][$id])) {
-						$count = \count($trace[$i]['args'][$id]);
+					elseif (is_array($trace[$i]['args'][$id])) {
+						$count = count($trace[$i]['args'][$id]);
 
 						if ($count > 5) {
 							$trace[$i]['args'][$id] = 'array(with '.$count.' elements)';
 						}
 						else {
-							$trace[$i]['args'][$id] = \str_replace("\n", ' ', \var_export($trace[$i]['args'][$id], true));
+							$trace[$i]['args'][$id] = str_replace("\n", ' ', var_export($trace[$i]['args'][$id], true));
 						}
 					}
 				}
 
-				$args = '('.\implode(', ', $trace[$i]['args']).')';
+				$args = '('.implode(', ', $trace[$i]['args']).')';
 			}
 
-			$context = \PHP_EOL.\PHP_EOL.'  '.\str_replace(\PHP_EOL, \PHP_EOL.'  ', $context).\PHP_EOL.'}';
+			$context = \PHP_EOL.\PHP_EOL.'  '.str_replace(\PHP_EOL, \PHP_EOL.'  ', $context).\PHP_EOL.'}';
 
 			if (!isset($trace[$i]['class'])) {
-				if (\in_array($trace[$i]['function'], ['include', 'include_once', 'require', 'require_once'])) {
-					$args = \strtr($args, '\\', '/');
+				if (in_array($trace[$i]['function'], ['include', 'include_once', 'require', 'require_once'])) {
+					$args = strtr($args, '\\', '/');
 				}
 
 				$context = $trace[$i]['function'].$args.' {'.$context;
@@ -288,7 +292,7 @@ final readonly class Error implements CallableState, Valuable {
 				$call = 'Class instance creation';
 			}
 			elseif ('->' == $trace[$i]['type']) {
-				if (\is_subclass_of($trace[$i]['class'], 'UnitEnum')) {
+				if (is_subclass_of($trace[$i]['class'], 'UnitEnum')) {
 					$object = ' Enum';
 				}
 				else {
@@ -303,9 +307,16 @@ final readonly class Error implements CallableState, Valuable {
 				$call = 'Static call';
 			}
 
-			$context = '// '.$call.' on line '.$trace[$i]['line'].' in file "'.
-			(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
-			'"'.\PHP_EOL.$context;
+			if (isset($trace[$i]['line'])) {
+				$context = '// '.$call.' on line '.$trace[$i]['line'].' in file "'.
+				(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
+				'"'.\PHP_EOL.$context;
+			}
+			else {
+				$context = '// '.$call.' in file "'.
+				(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
+				'"'.\PHP_EOL.$context;
+			}
 		}
 
 		return \PHP_EOL.$context;
@@ -331,12 +342,12 @@ final readonly class Error implements CallableState, Valuable {
 		$this->id      = $state['id'];
 		$this->message = $state['message'];
 		$this->context = $state['context'];
-		$this->file    = \strtr($state['file'], '\\', '/');
+		$this->file    = strtr($state['file'], '\\', '/');
 		$this->line    = $state['line'];
 		$this->type    = $state['type'];
 		$this->errno   = $state['errno'];
 		$this->fatal   = $state['fatal'];
-		$this->time    = $state['time'] ?? \time();
-		$this->date    = $state['date'] ?? \date('Y-m-d H:i:s', $this->time);
+		$this->time    = $state['time'] ?? time();
+		$this->date    = $state['date'] ?? date('Y-m-d H:i:s', $this->time);
 	}
 }

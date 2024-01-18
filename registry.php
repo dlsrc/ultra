@@ -24,7 +24,7 @@ final class Registry {
 			return;
 		}
 
-		$key = \ftok(__FILE__, 'b');
+		$key = ftok(__FILE__, 'b');
 
 		if (-1 == $key) {
 			return;
@@ -63,18 +63,18 @@ final class Registry {
 		include_once __DIR__.'/lang/io.'.Lang::name().'.php';
 		include_once __DIR__.'/mutex/mutex.php';
 
-		if (\extension_loaded('sysvsem')) {
+		if (extension_loaded('sysvsem')) {
 			include_once __DIR__.'/mutex/mutexsysvsem.php';
 			$mtx = SysVSemMutex::get($key);
 		}
-		elseif (\extension_loaded('shmop')) {
+		elseif (extension_loaded('shmop')) {
 			include_once __DIR__.'/mutex/mutexshmop.php';
 			$mtx = ShmopMutex::get($key);
 		}
 		else {
 			include_once __DIR__.'/mutex/mutexfile.php';
 			$mtx = FileMutex::get($key);
-			$mtx->setpath(\dirname($b->registry_folder));
+			$mtx->setpath(dirname($b->registry_folder));
 		}
 
 		if ($mtx->acquire()) {
@@ -102,8 +102,8 @@ final class Registry {
 	 * $code - строка исходного кода.
 	 */
 	private function splitNamespaces(string $code): array {
-		if (\preg_match_all('/\s+namespace\s+([^\W\d](?:[\w\x5C]*\w)?)(\;|\s*\{)/is', $code, $match)) {
-			$split = \preg_split('/\s+namespace\s+([^\W\d](?:[\w\x5C]*\w)?)(\;|\s*\{)/is', $code);
+		if (preg_match_all('/\s+namespace\s+([^\W\d](?:[\w\x5C]*\w)?)(\;|\s*\{)/is', $code, $match)) {
+			$split = preg_split('/\s+namespace\s+([^\W\d](?:[\w\x5C]*\w)?)(\;|\s*\{)/is', $code);
 			$ns = [];
 
 			foreach ($match[1] as $i => $name) {
@@ -132,14 +132,14 @@ final class Registry {
 	 * $file - файл с исходным кодом.
 	 */
 	private function splitCode(string $file): array {
-		$code = \php_strip_whitespace($file);
+		$code = php_strip_whitespace($file);
 
-		$code = \preg_replace([
-			'/<<<(\x22|\x27)([^\W\d]\w*)\g{1}.+\g{2};/Uis',
-			'/<<<([^\W\d]\w*).+\g{1};/Uis',
+		$code = preg_replace([
+			'/<<<(\x22|\x27)([^\W\d]\w*)\g{1}/u',
+			'/<<<([^\W\d]\w*).+\g{1};/isu',
 			'/((\x5C){2})+/',
-			'/(\x22|\x27).*(?<!\x5C)\g{1}/Uis',
-		], '', $code);
+			'/(\x22|\x27).*(?<!\x5C)\g{1}/Uisu',
+		], ['<<<\2', '', '', ''], $code);		
 
 		return $this->splitNamespaces($code);
 	}
@@ -148,7 +148,7 @@ final class Registry {
 	 * Построение реестра классов с передачей результата в загрузчик классов.
 	 */
 	public function create(Boot $b): void {
-		$library = \array_values($b->code_library);
+		$library = array_values($b->code_library);
 		$excluded = $b->excluded_folder;
 		$extension = $b->extension;
 
@@ -156,7 +156,7 @@ final class Registry {
 			$extension = '*';
 		}
 		else {
-			$extension = '{'.\implode(',', $b->extension).'}';
+			$extension = '{'.implode(',', $b->extension).'}';
 		}
 
 		$register = [];
@@ -170,24 +170,24 @@ final class Registry {
 		) \s+ \{
 		/xis';
 
-		\ignore_user_abort(true);
-		\set_time_limit(0);
+		ignore_user_abort(true);
+		set_time_limit(0);
 
 		for ($i = 0; isset($library[$i]); $i++) {
-			if (\is_file($library[$i])) {
+			if (is_file($library[$i])) {
 				$files = [$library[$i]];
 			}
-			elseif (!$files = \glob($library[$i].'*.'.$extension, \GLOB_BRACE)) {
+			elseif (!$files = glob($library[$i].'*.'.$extension, GLOB_BRACE)) {
 				$files = [];
 			}
 
 			foreach ($files as $file) {
-				if (\in_array($file, $excluded)) {
+				if (in_array($file, $excluded)) {
 					continue;
 				}
 
 				foreach ($this->splitCode($file) as $name => $code) {
-					if (\preg_match_all($pattern, $code, $match)) {
+					if (preg_match_all($pattern, $code, $match)) {
 						foreach ($match[1] as $itc) {
 							$itc = $name.$itc;
 							
@@ -196,12 +196,12 @@ final class Registry {
 									continue;
 								}
 
-								if (\filemtime($register[$itc]) > \filemtime($file)) {
+								if (filemtime($register[$itc]) > filemtime($file)) {
 									continue;
 								}
 
-								while (\in_array($file, $register)) {
-									$key = \array_search($file, $register);
+								while (in_array($file, $register)) {
+									$key = array_search($file, $register);
 									unset($register[$key]);
 								}
 							}
@@ -212,21 +212,21 @@ final class Registry {
 				}
 			}
 
-			if (\is_file($library[$i])) {
+			if (is_file($library[$i])) {
 				continue;
 			}
 
-			if (!$list = \scandir($library[$i])) {
+			if (!$list = scandir($library[$i])) {
 				continue;
 			}
 
 			foreach ($list as $val) {
-				if (\is_dir($library[$i].$val)) {
+				if (is_dir($library[$i].$val)) {
 					if ('.' == $val || '..' == $val || '.git' == $val) {
 						continue;
 					}
 
-					if (\in_array($library[$i].$val.'/', $excluded)) {
+					if (in_array($library[$i].$val.'/', $excluded)) {
 						continue;
 					}
 

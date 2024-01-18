@@ -6,6 +6,8 @@
  */
 namespace ultra;
 
+use Closure;
+
 /**
  * Типаж для имплементации интерфейса \ultra\Valuable в классах, служащих обёрткой валидным
  * значениям любого типа.
@@ -37,7 +39,7 @@ trait Wrapper {
 		return $this->_value;
 	}
 
-	public function expect(\Closure|null $reject = null): mixed {
+	public function expect(Closure|null $reject = null): mixed {
 		return $this->_value;
 	}
 
@@ -46,11 +48,11 @@ trait Wrapper {
 	 * никогда не будет возвращен (см. ковариантность).
 	 * В данном контексте метод будет синонимом Valuable::follow().
 	 */
-	public function fetch(\Closure|null $resolve = null, \Closure|null $reject = null): self {
+	public function fetch(Closure|null $resolve = null, Closure|null $reject = null): self {
 		return $this->follow($resolve);
 	}
 
-	public function follow(\Closure|null $resolve = null, \Closure|null $reject = null): self {
+	public function follow(Closure|null $resolve = null, Closure|null $reject = null): self {
 		if (null === $resolve) {
 			return $this;
 		}
@@ -58,7 +60,7 @@ trait Wrapper {
 		return $this->commit($resolve);
 	}
 
-	public function commit(\Closure $resolve): self {
+	public function commit(Closure $resolve): self {
 		if (null === ($result = $resolve($this))) {
 			return $this;
 		}
@@ -74,7 +76,7 @@ trait Wrapper {
 	 * Поскольку результат действующий, восстановление после ошибки не требуется.
 	 * Сразу возвращается сам интерфейс.
 	 */
-	public function recover(\Closure $reject): self {
+	public function recover(Closure $reject): self {
 		return $this;
 	}
 }

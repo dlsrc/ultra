@@ -18,7 +18,7 @@ abstract class Collection implements Immutable, Extendable, Exportable, Importab
 
 		if (empty($state)) {
 			if ('' == $name) {
-				$this->_name = \get_class($this);
+				$this->_name = get_class($this);
 			}
 			else {
 				$this->_name = $name;
@@ -32,7 +32,7 @@ abstract class Collection implements Immutable, Extendable, Exportable, Importab
 			$this->_file = $state['_file'];
 
 			foreach ($state as $name => $value) {
-				if (\property_exists($this, $name)) {
+				if (property_exists($this, $name)) {
 					$this->$name = $value;
 				}
 			}

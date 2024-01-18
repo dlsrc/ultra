@@ -28,31 +28,31 @@ trait NamelessContainer {
 			return self::$_container[static::class];
 		}
 
-		if (\is_readable($file)) {
+		if (is_readable($file)) {
 			self::$_container[static::class] = @include $file;
 
 			if (self::$_container[static::class] instanceof static) {
 				return self::$_container[static::class];
 			}
 
-			if (!\is_object(self::$_container[static::class])) {
-				\unlink($file);
+			if (!is_object(self::$_container[static::class])) {
+				unlink($file);
 				Error::log(
 					Core::message(
 						'e_type',
 						$file,
-						\gettype(self::$_container[static::class])
+						gettype(self::$_container[static::class])
 					),
 					Status::Domain
 				);
 			}
 			else {
-				\unlink($file);
+				unlink($file);
 				Error::log(
 					Core::message(
 						'e_class',
 						$file,
-						\get_class(self::$_container[static::class]),
+						get_class(self::$_container[static::class]),
 						static::class
 					),
 					Status::Domain
@@ -78,7 +78,7 @@ trait NamelessContainer {
 			return self::$_container[static::class];
 		}
 
-		if (!\is_readable($file)) {
+		if (!is_readable($file)) {
 			return null;
 		}
 

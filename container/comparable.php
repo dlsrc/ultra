@@ -13,7 +13,7 @@ interface Comparable {
 
 trait Comparison {
 	final public function isCompatible(Immutable $getter, string $property = '_property', bool $by_vals = false): bool {
-		if (!\property_exists($this, $property)) {
+		if (!property_exists($this, $property)) {
 			return false;
 		}
 
@@ -29,7 +29,7 @@ trait Comparison {
 			}
 		}
 		else {
-			foreach (\array_keys($this->$property) as $name) {
+			foreach (array_keys($this->$property) as $name) {
 				if (!isset($getter->$name)) {
 					return false;
 				}

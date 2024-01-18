@@ -17,7 +17,7 @@ abstract class Dictionary implements CallableState, Exportable, Immutable, Impor
 
 		if (empty($state)) {
 			if ('' == $name) {
-				$this->_name = \get_class($this);
+				$this->_name = get_class($this);
 			}
 			else {
 				$this->_name = $name;

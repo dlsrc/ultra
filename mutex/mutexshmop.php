@@ -14,14 +14,14 @@ final class ShmopMutex extends Mutex {
 	protected function create(): void {
 		$this->status = false;
 
-		if (!$this->sem = \shmop_open($this->key, 'c', 0666, 1)) {
+		if (!$this->sem = shmop_open($this->key, 'c', 0666, 1)) {
 			return;
 		}
 
-		$data = \shmop_read($this->sem, 0, 1);
+		$data = shmop_read($this->sem, 0, 1);
 
 		if ('a' != $data && 'f' != $data) {
-			if (1 == \shmop_write($this->sem, 'a', 0)) {
+			if (1 == shmop_write($this->sem, 'a', 0)) {
 				$this->status = true;
 			}
 		}
@@ -37,18 +37,18 @@ final class ShmopMutex extends Mutex {
 		}
 
 		if ($blocking) {
-			\set_time_limit(0);
+			set_time_limit(0);
 
-			while ('a' == \shmop_read($this->sem, 0, 1)) {
-				\sleep(1);
+			while ('a' == shmop_read($this->sem, 0, 1)) {
+				sleep(1);
 			}
 
-			if (1 == \shmop_write($this->sem, 'a', 0)) {
+			if (1 == shmop_write($this->sem, 'a', 0)) {
 				$this->status = true;
 			}
 		}
-		elseif ('f' == \shmop_read($this->sem, 0, 1)) {
-			if (1 == \shmop_write($this->sem, 'a', 0)) {
+		elseif ('f' == shmop_read($this->sem, 0, 1)) {
+			if (1 == shmop_write($this->sem, 'a', 0)) {
 				$this->status = true;
 			}
 		}
@@ -58,7 +58,7 @@ final class ShmopMutex extends Mutex {
 
 	public function release(): bool {
 		if ($this->status) {
-			if (1 == \shmop_write($this->sem, 'f', 0)) {
+			if (1 == shmop_write($this->sem, 'f', 0)) {
 				$this->status = false;
 				return true;
 			}
@@ -69,7 +69,7 @@ final class ShmopMutex extends Mutex {
 
 	public function remove(): bool {
 		if ($this->status) {
-			if (\shmop_delete($this->sem)) {
+			if (shmop_delete($this->sem)) {
 				$this->status = false;
 				self::drop($this->key);
 				return true;

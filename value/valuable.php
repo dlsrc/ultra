@@ -6,6 +6,8 @@
  */
 namespace ultra;
 
+use Closure;
+
 /**
  * Интерфейс наделяет как ожидаемые, так и ошибочные значения и состояния единым поведением.
  * Позволяет распространять ошибочные состояния в вызывающие методы.
@@ -45,7 +47,7 @@ interface Valuable {
 	 * Ожидаемая сигнатура замыканий:
 	 * fn reject(Valuable $reject): mixed;
 	 */
-	public function expect(\Closure|null $reject = null): mixed;
+	public function expect(Closure|null $reject = null): mixed;
 
 	/**
 	 * Обработать результат и вернуть либо интерфейс Valuable, либо NULL.
@@ -71,7 +73,7 @@ interface Valuable {
 	 * fn resolve(Valuable $value): mixed;
 	 * fn reject(Valuable $reject): mixed;
 	 */
-	public function fetch(\Closure|null $resolve = null, \Closure|null $reject = null): self|null;
+	public function fetch(Closure|null $resolve = null, Closure|null $reject = null): self|null;
 
 	/**
 	 * Обработать результат и вернуть интерфейс Valuable.
@@ -79,19 +81,19 @@ interface Valuable {
 	 * всегда возвращает интерфейс Valuable, то есть если $reject возвращает NULL или $reject
 	 * не будет задан, то интерфейс должен вернуть сам себя, а не NULL.
 	 */
-	public function follow(\Closure|null $resolve = null, \Closure|null $reject = null): self;
+	public function follow(Closure|null $resolve = null, Closure|null $reject = null): self;
 
 	/**
 	 * Совершить действия над успешным результатом передав замыкание $resolve, вернуть
 	 * интерфейс Valuable.
 	 * По умолчанию аналогично вызову Valuable::follow($resolve);
 	 */
-	public function commit(\Closure $resolve): self;
+	public function commit(Closure $resolve): self;
 	
 	/**
 	 * Попытаться восстановить результат из ошибочного состояния и вернуть интерфейс Valuable
 	 * с действующим значением.
 	 * Аналогично вызову Valuable::follow(null, $reject);
 	 */
-	public function recover(\Closure $reject): self;
+	public function recover(Closure $reject): self;
 }

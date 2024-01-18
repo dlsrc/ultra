@@ -28,7 +28,7 @@ trait Filename {
 
 	public function setFilename(string $file): void {
 		if ('' != $file && IO::indir($file)) {
-			$this->_file = \strtr(\realpath(\dirname($file)).'/'.\basename($file), '\\', '/');
+			$this->_file = strtr(realpath(dirname($file)).'/'.basename($file), '\\', '/');
 		}
 	}
 }

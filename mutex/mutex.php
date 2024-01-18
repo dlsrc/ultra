@@ -62,31 +62,30 @@ abstract class Mutex implements Valuable {
 	/**
 	 * Получение объекта семафора на основании файлового пути и идентификатора проекта.
 	 */
-	public static function make(string $filename, string $project_id, bool $danger = false)
-	: static|Error {
-		if (!\file_exists($filename)) {
+	public static function make(string $filename, string $project_id, bool $danger = false): static|Error {
+		if (!file_exists($filename)) {
 			return Error::log(IO::message('e_file', $filename), Code::Nofile);
 		}
 
-		$key = \ftok($filename, $project_id);
+		$key = ftok($filename, $project_id);
 
 		if (-1 == $key) {
 			return Error::log(Core::message('e_ftok'), Status::User);
 		}
 
-		if (\extension_loaded('sysvsem')) {
+		if (extension_loaded('sysvsem')) {
 			return SysVSemMutex::get($key);
 		}
-		elseif (\extension_loaded('shmop')) {
+		elseif (extension_loaded('shmop')) {
 			return ShmopMutex::get($key);
 		}
 		else {
 			$mtx = FileMutex::get($key);
-			$mtx->setpath(\dirname(__DIR__, 3));
+			$mtx->setpath(dirname(__DIR__, 3));
 
 			if ($danger) {
 				if (!$mtx->pathExists()) {
-					$mtx->setpath(\dirname(__DIR__, 3), true);
+					$mtx->setpath(dirname(__DIR__, 3), true);
 
 					if (!$mtx->pathExists()) {
 						return Error::log(

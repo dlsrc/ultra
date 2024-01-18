@@ -6,6 +6,8 @@
  */
 namespace ultra;
 
+use Closure;
+
 /**
  * Типаж для прямой имплементации интерфейса ultra\Valuable в классы ошибочных, неожиданных
  * и неопределённых состояний.
@@ -38,7 +40,7 @@ trait Suspense {
 		return $default;
 	}
 
-	public function expect(\Closure|null $reject = null): mixed {
+	public function expect(Closure|null $reject = null): mixed {
 		if (null === $reject) {
 			return null;
 		}
@@ -46,7 +48,7 @@ trait Suspense {
 		return $reject($this);
 	}
 
-	public function fetch(\Closure|null $resolve = null, \Closure|null $reject = null): self|null {
+	public function fetch(Closure|null $resolve = null, Closure|null $reject = null): self|null {
 		if (null === $reject && null === ($result = $reject($this))) {
 			return null;
 		}
@@ -58,7 +60,7 @@ trait Suspense {
 		return new Substitute($result, $this);
 	}
 
-	public function follow(\Closure|null $resolve = null, \Closure|null $reject = null): self {
+	public function follow(Closure|null $resolve = null, Closure|null $reject = null): self {
 		if (null === $reject) {
 			return $this;
 		}
@@ -70,11 +72,11 @@ trait Suspense {
 	 * Поскольку результат ошибочный, совершать любые действия с ним бессмысленно.
 	 * Сразу возвращается сам интерфейс.
 	 */
-	public function commit(\Closure $resolve): self {
+	public function commit(Closure $resolve): self {
 		return $this;
 	}
 
-	public function recover(\Closure $reject): self {
+	public function recover(Closure $reject): self {
 		if (null === ($result = $reject($this))) {
 			return $this;
 		}

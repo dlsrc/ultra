@@ -44,22 +44,22 @@ final class IO implements Sociable {
 	 * создать.
 	 */
 	public static function isdir(string $dir): bool {
-		$dir  = \strtr($dir, '\\', '/');
+		$dir  = strtr($dir, '\\', '/');
 
 		if ('/' == $dir) {
 			return true;
 		}
 
-		if (\str_ends_with($dir, '/')) {
-			$dir = \substr($dir, 0, -1);
+		if (str_ends_with($dir, '/')) {
+			$dir = substr($dir, 0, -1);
 		}
 
-		if (!\is_dir($dir)) {
-			$mtx = Mutex::make(__FILE__, \substr($dir, -1), true);
+		if (!is_dir($dir)) {
+			$mtx = Mutex::make(__FILE__, substr($dir, -1), true);
 
 			if (!$mtx->valid()) {
-				if (!\mkdir($dir, self::$_dir, true)) {
-					if (\file_exists($dir)) {
+				if (!mkdir($dir, self::$_dir, true)) {
+					if (file_exists($dir)) {
 						return true;
 					}
 
@@ -69,8 +69,8 @@ final class IO implements Sociable {
 			}
 			else {
 				if ($mtx->acquire(true)) {
-					if (!\file_exists($dir)) {
-						if (!\mkdir($dir, self::$_dir, true)) {
+					if (!file_exists($dir)) {
+						if (!mkdir($dir, self::$_dir, true)) {
 							$mtx->release();
 							Error::log(self::message('e_make_dir', $dir), Code::Makedir);
 							return false;
@@ -90,8 +90,8 @@ final class IO implements Sociable {
 	 * директорию в которой он должен был бы находиться.
 	 */
 	public static function indir(string $file): bool {
-		if (!\is_file($file)) {
-			return self::isdir(\dirname($file));
+		if (!is_file($file)) {
+			return self::isdir(dirname($file));
 		}
 
 		return true;
@@ -107,16 +107,16 @@ final class IO implements Sociable {
 			return false;
 		}
 
-		if (!\is_dir($from)) {
+		if (!is_dir($from)) {
 			Error::log(self::message('e_dir', $from), Code::Nodir, false);
 			return false;
 		}
 
-		$from = \strtr(\realpath($from), '\\', '/');
-		$to = \strtr(\realpath($to), '\\', '/');
+		$from = strtr(realpath($from), '\\', '/');
+		$to = strtr(realpath($to), '\\', '/');
 
 		if ($dir) {
-			$to = $to.\substr($from, \strrpos($from, '/'));
+			$to = $to.substr($from, strrpos($from, '/'));
 		}
 
 		$from = [$from];
@@ -125,14 +125,14 @@ final class IO implements Sociable {
 		$in   = [];
 
 		for ($i=0; isset($from[$i]); $i++) {
-			$scan = \scandir($from[$i]);
+			$scan = scandir($from[$i]);
 
 			foreach($scan as $name) {
 				if ('.' == $name || '..' == $name) {
 					continue;
 				}
 
-				if (\is_dir($from[$i].'/'.$name)) {
+				if (is_dir($from[$i].'/'.$name)) {
 					if (!self::isdir($to[$i].'/'.$name)) {
 						return false;
 					}
@@ -147,14 +147,14 @@ final class IO implements Sociable {
 			}
 		}
 
-		foreach (\array_keys($out) as $i) {
-			if (!\copy($out[$i], $in[$i])) {
+		foreach (array_keys($out) as $i) {
+			if (!copy($out[$i], $in[$i])) {
 				Error::log(
 					self::message(
 						'e_copy',
-						\substr($out[$i], \strrpos($out[$i], '/')),
-						\substr($out[$i], 0, \strrpos($out[$i], '/')),
-						\substr($in[$i], 0, \strrpos($in[$i], '/'))
+						substr($out[$i], strrpos($out[$i], '/')),
+						substr($out[$i], 0, strrpos($out[$i], '/')),
+						substr($in[$i], 0, strrpos($in[$i], '/'))
 					),
 					Code::Copy,
 					false
@@ -163,9 +163,9 @@ final class IO implements Sociable {
 				return false;
 			}
 
-			\chmod($in[$i], self::$_file);
+			chmod($in[$i], self::$_file);
 
-			if ($unlink && !\unlink($out[$i])) {
+			if ($unlink && !unlink($out[$i])) {
 				Error::log(self::message('e_unlink', $out[$i]), Code::Unlink);
 			}
 		}
@@ -175,10 +175,10 @@ final class IO implements Sociable {
 				unset($from[0]);
 			}
 
-			$from = \array_reverse($from);
+			$from = array_reverse($from);
 
 			foreach ($from as $name) {
-				if (!\rmdir($name)) {
+				if (!rmdir($name)) {
 					Error::log(self::message('e_rmdir', $name), Code::Rmdir);
 				}
 			}
@@ -195,13 +195,13 @@ final class IO implements Sociable {
 			return false;
 		}
 
-		if (!\copy($from, $to)) {
+		if (!copy($from, $to)) {
 			Error::log(
 				self::message(
 					'e_copy',
-					\substr($from, \strrpos($from, '/')),
-					\substr($from, 0, \strrpos($from, '/')),
-					\substr($to, 0, \strrpos($to, '/'))
+					substr($from, strrpos($from, '/')),
+					substr($from, 0, strrpos($from, '/')),
+					substr($to, 0, strrpos($to, '/'))
 				),
 				Code::Copy,
 				false
@@ -210,7 +210,7 @@ final class IO implements Sociable {
 			return false;
 		}
 
-		\chmod($to, self::$_file);
+		chmod($to, self::$_file);
 		return true;
 	}
 
@@ -227,12 +227,12 @@ final class IO implements Sociable {
 			return false;
 		}
 
-		if (!\rename($from, $to)) {
+		if (!rename($from, $to)) {
 			Error::log(self::message('e_rename', $from, $to), Code::Rename);
 			return false;
 		}
 
-		\chmod($to, self::$_file);
+		chmod($to, self::$_file);
 		return true;
 	}
 
@@ -247,23 +247,23 @@ final class IO implements Sociable {
 	 * Удалить папку и(или) все ее содержимое.
 	 */
 	public static function rm(string $fold, bool $dir = false): bool {
-		if (!\is_dir($fold)) {
+		if (!is_dir($fold)) {
 			Error::log(self::message('e_dir', $fold), Code::Nodir);
 			return false;
 		}
 
-		$fold = [\strtr(\realpath($fold), '\\', '/')];
+		$fold = [strtr(realpath($fold), '\\', '/')];
 		$file = [];
 
 		for ($i=0; isset($fold[$i]); $i++) {
-			$scan = \scandir($fold[$i]);
+			$scan = scandir($fold[$i]);
 
 			foreach($scan as $name) {
 				if ('.' == $name || '..' == $name) {
 					continue;
 				}
 
-				if (\is_dir($fold[$i].'/'.$name)) {
+				if (is_dir($fold[$i].'/'.$name)) {
 					$fold[] = $fold[$i].'/'.$name;
 				}
 				else {
@@ -273,7 +273,7 @@ final class IO implements Sociable {
 		}
 
 		foreach ($file as $name) {
-			if (!\unlink($name)) {
+			if (!unlink($name)) {
 				Error::log(self::message('e_unlink', $name), Code::Unlink);
 			}
 		}
@@ -282,10 +282,10 @@ final class IO implements Sociable {
 			unset($fold[0]);
 		}
 
-		$fold = \array_reverse($fold);
+		$fold = array_reverse($fold);
 
 		foreach ($fold as $name) {
-			if (!\rmdir($name)) {
+			if (!rmdir($name)) {
 				Error::log(self::message('e_rmdir', $name), Code::Rmdir);
 			}
 		}
@@ -294,13 +294,13 @@ final class IO implements Sociable {
 	}
 
 	public static function fw(string $file, string $content): int {
-		$len = \file_put_contents($file, $content);
+		$len = file_put_contents($file, $content);
 
-		if (FALSE === $len) {
+		if (false === $len) {
 			Error::log(self::message('e_make_file', $file), Code::Makefile);
 			$len = -1;
 		}
-		elseif (!\chmod($file, self::$_file)) {
+		elseif (!chmod($file, self::$_file)) {
 			Error::log(self::message('e_chmod', $file), Code::Chmod);
 		}
 

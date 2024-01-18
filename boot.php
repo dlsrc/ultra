@@ -111,10 +111,10 @@ final class Boot {
 		}
 
 		if ('' == $initial_path) {
-			$initial_path = \strtr(\dirname(\realpath($_SERVER['SCRIPT_FILENAME'])), '\\', '/');
+			$initial_path = strtr(dirname(realpath($_SERVER['SCRIPT_FILENAME'])), '\\', '/');
 		}
 		else {
-			$initial_path = \strtr(\realpath($initial_path), '\\', '/');
+			$initial_path = strtr(realpath($initial_path), '\\', '/');
 		}
 
 		$fn_abs = function (string $dir) use ($initial_path): string {
@@ -122,18 +122,18 @@ final class Boot {
 				return '';
 			}
 
-			if (\str_starts_with($dir, './') || \str_starts_with($dir, '*/')) {
-				$dir = \mb_substr($dir, 2);
+			if (str_starts_with($dir, './') || str_starts_with($dir, '*/')) {
+				$dir = mb_substr($dir, 2);
 			}
 
 			if ('' == $dir || '.' == $dir || '*' == $dir) {
 				return $initial_path;
 			}
 
-			if ($count = \substr_count($dir, '../')) {
-				$dir = \strtr(\dirname($initial_path, $count), '\\', '/').'/'.\str_replace('../', '', $dir);
+			if ($count = substr_count($dir, '../')) {
+				$dir = strtr(dirname($initial_path, $count), '\\', '/').'/'.str_replace('../', '', $dir);
 
-				if (\file_exists($dir)) {
+				if (file_exists($dir)) {
 					return $dir;
 				}
 				else {
@@ -141,19 +141,19 @@ final class Boot {
 				}
 			}
 
-			if (!\str_starts_with($dir, '/') && \file_exists($initial_path.'/'.$dir)) {
+			if (!str_starts_with($dir, '/') && file_exists($initial_path.'/'.$dir)) {
 				return $initial_path.'/'.$dir;
 			}
 
-			if (\file_exists($dir)) {
-				return \strtr(\realpath($dir), '\\', '/');
+			if (file_exists($dir)) {
+				return strtr(realpath($dir), '\\', '/');
 			}
 
 			return '';
 		};
 
 		$fn_filter = function(array &$dir) use ($fn_abs): void {
-			foreach (\array_keys($dir) as $id) {
+			foreach (array_keys($dir) as $id) {
 				$dir[$id] = $fn_abs($dir[$id]);
 
 				if ('' == $dir[$id]) {
@@ -161,7 +161,7 @@ final class Boot {
 					continue;
 				}
 
-				if (\is_dir($dir[$id]) && !\str_ends_with($dir[$id], '/')) {
+				if (is_dir($dir[$id]) && !str_ends_with($dir[$id], '/')) {
 					$dir[$id] = $dir[$id].'/';
 				}
 			}
@@ -173,8 +173,8 @@ final class Boot {
 
 		$fn_filter($code_library);
 
-		if (empty($code_library) || !\in_array(\strtr(__DIR__, '\\', '/').'/', $code_library)) {
-			$code_library[] = \strtr(__DIR__, '\\', '/').'/';
+		if (empty($code_library) || !in_array(strtr(__DIR__, '\\', '/').'/', $code_library)) {
+			$code_library[] = strtr(__DIR__, '\\', '/').'/';
 		}
 
 		$fn_filter($excluded_folder);
@@ -195,7 +195,7 @@ final class Boot {
 
 		self::$_boot = new Boot($initial_path, $registry_folder, $code_library, $excluded_folder);
 
-		\spl_autoload_register([self::$_boot, 'load'], true, true);
+		spl_autoload_register([self::$_boot, 'load'], true, true);
 	}
 
 	/**
@@ -206,7 +206,7 @@ final class Boot {
 			return self::$_boot->initial_path;
 		}
 
-		return \strtr(\dirname(\realpath($_SERVER['SCRIPT_FILENAME'])), '\\', '/');
+		return strtr(dirname(realpath($_SERVER['SCRIPT_FILENAME'])), '\\', '/');
 	}
 
 	/**
@@ -311,15 +311,15 @@ final class Boot {
 
 		$e = new Exporter;
 		$p = Core::pattern('src_header');
-		$date = \date('Y');
-		$last = \date('Y-m-d H:i:s');
+		$date = date('Y');
+		$last = date('Y-m-d H:i:s');
 
 		foreach ($this->modified_branch as $file => $branch) {
 			if (self::WHOLE_MAP == $file) {
 				continue;
 			}
 
-			\ksort($this->involved_branch[$file]);
+			ksort($this->involved_branch[$file]);
 
 			$e->setFilename($this->registry_folder.$file);
 
@@ -329,7 +329,7 @@ final class Boot {
 					$branch,
 					$date,
 					$last,
-					\PHP_MAJOR_VERSION.'.'.\PHP_MINOR_VERSION
+					PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION
 				)
 			);
 		}
@@ -344,7 +344,7 @@ final class Boot {
 		$this->involved_branch[self::WHOLE_MAP] = $register;
 		$this->modified_branch[self::WHOLE_MAP] = Core::message('h_registry');
 
-		\ksort($this->involved_branch[self::WHOLE_MAP]);
+		ksort($this->involved_branch[self::WHOLE_MAP]);
 
 		$mode = Mode::Develop->prefer();
 
@@ -352,9 +352,9 @@ final class Boot {
 			$this->involved_branch[self::WHOLE_MAP],
 			Core::pattern('src_header')->replace(
 				$this->modified_branch[self::WHOLE_MAP],
-				\date('Y'),
-				\date('Y-m-d H:i:s'),
-				\PHP_MAJOR_VERSION.'.'.\PHP_MINOR_VERSION
+				date('Y'),
+				date('Y-m-d H:i:s'),
+				PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION
 			)
 		);
 
@@ -368,22 +368,22 @@ final class Boot {
 	 * доступен, FALSE - если нет.
 	 */
 	private function isClass(string $class): bool {
-		if (\file_exists($this->involved_branch[$this->branch_file][$class])) {
+		if (file_exists($this->involved_branch[$this->branch_file][$class])) {
 			include_once $this->involved_branch[$this->branch_file][$class];
 
-			if (\class_exists($class, false)) {
+			if (class_exists($class, false)) {
 				return true;
 			}
 
-			if (\interface_exists($class, false)) {
+			if (interface_exists($class, false)) {
 				return true;
 			}
 
-			if (\trait_exists($class, false)) {
+			if (trait_exists($class, false)) {
 				return true;
 			}
 
-			if (\enum_exists($class, false)) {
+			if (enum_exists($class, false)) {
 				return true;
 			}
 		}
@@ -437,10 +437,10 @@ final class Boot {
 		}
 
 		if (!isset($this->involved_branch[self::WHOLE_MAP])) {
-			if (\is_readable($this->registry_folder.self::WHOLE_MAP)) {
+			if (is_readable($this->registry_folder.self::WHOLE_MAP)) {
 				$this->involved_branch[self::WHOLE_MAP] = include $this->registry_folder.self::WHOLE_MAP;
 
-				if (!\is_array($this->involved_branch[self::WHOLE_MAP])) {
+				if (!is_array($this->involved_branch[self::WHOLE_MAP])) {
 					$this->involved_branch[self::WHOLE_MAP] = [];
 				}
 			}
@@ -454,7 +454,7 @@ final class Boot {
 			return;
 		}
 
-		if (\in_array(self::WHOLE_MAP, $this->modified_branch)) {
+		if (in_array(self::WHOLE_MAP, $this->modified_branch)) {
 			// Класс до сих пор не загружен и нет возможности перезагрузки реестра.
 			if ($this->noOtherAutoloaders()) {
 				$this->errorLoad($class);
@@ -479,8 +479,8 @@ final class Boot {
 	 * Убедиться в отсутствии других функций автозагрузки.
 	 */
 	private function noOtherAutoloaders(): bool {
-		if ($list = \spl_autoload_functions()) {
-			if (1 == \count($list)) {
+		if ($list = spl_autoload_functions()) {
+			if (1 == count($list)) {
 				return true;
 			}
 		}
@@ -504,12 +504,12 @@ final class Boot {
 	 */
 	public function changeBranch(string $name): void {
 		$this->branch_name = $name;
-		$this->branch_file = \md5($name).'.php';
+		$this->branch_file = md5($name).'.php';
 
-		if (\is_readable($this->registry_folder.$this->branch_file)) {
+		if (is_readable($this->registry_folder.$this->branch_file)) {
 			$this->involved_branch[$this->branch_file] = include $this->registry_folder.$this->branch_file;
 
-			if (!\is_array($this->involved_branch[$this->branch_file])) {
+			if (!is_array($this->involved_branch[$this->branch_file])) {
 				$this->involved_branch[$this->branch_file] = [];
 			}
 		}
@@ -524,7 +524,7 @@ final class Boot {
 	 */
 	public function includeBranch(): void {
 		foreach ($this->involved_branch[$this->branch_file] as $file) {
-			if (\file_exists($file)) {
+			if (file_exists($file)) {
 				include_once $file;
 			}
 		}
@@ -538,16 +538,16 @@ final class Boot {
 	 */
 	public function getClassPath(string $class, bool $remake): string {
 		if (isset($this->involved_branch[$this->branch_file][$class])
-		&& \file_exists($this->involved_branch[$this->branch_file][$class])
+		&& file_exists($this->involved_branch[$this->branch_file][$class])
 		) {
 			return $this->involved_branch[$this->branch_file][$class];
 		}
 
 		if (!isset($this->involved_branch[self::WHOLE_MAP])) {
-			if (\is_readable($this->registry_folder.self::WHOLE_MAP)) {
+			if (is_readable($this->registry_folder.self::WHOLE_MAP)) {
 				$this->involved_branch[self::WHOLE_MAP] = include $this->registry_folder.self::WHOLE_MAP;
 
-				if (!\is_array($this->involved_branch[self::WHOLE_MAP])) {
+				if (!is_array($this->involved_branch[self::WHOLE_MAP])) {
 					$this->involved_branch[self::WHOLE_MAP] = [];
 				}
 			}
@@ -561,7 +561,7 @@ final class Boot {
 		}
 
 		if (isset($this->involved_branch[self::WHOLE_MAP][$class])
-		&& \file_exists($this->involved_branch[self::WHOLE_MAP][$class])
+		&& file_exists($this->involved_branch[self::WHOLE_MAP][$class])
 		) {
 			return $this->involved_branch[self::WHOLE_MAP][$class];
 		}

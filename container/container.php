@@ -29,7 +29,7 @@ trait PropertyContainer {
 	 */
 	final public static function add(self $container, string $name = '', bool $update = true): bool {
 		if ('' == $name) {
-			$name = \get_class($container);
+			$name = get_class($container);
 		}
 
 		if ($update || !isset(self::$_container[$name])) {

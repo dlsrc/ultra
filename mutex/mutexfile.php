@@ -22,7 +22,7 @@ final class FileMutex extends Mutex {
 	public function setpath(string $path, bool $check = false): void {
 		$path = \strtr($path, '\\', '/');
 
-		if (!\str_ends_with($path, '/')) {
+		if (!str_ends_with($path, '/')) {
 			$path.= '/';
 		}
 
@@ -42,7 +42,7 @@ final class FileMutex extends Mutex {
 	 * а создание папки приводит к ошибке или непредсказуемому результату (например, в ultra\IO::isdir()).
 	 */
 	public function pathExists(): bool {
-		return \is_dir(\substr($this->sem, 0, \strrpos($this->sem, '/')));
+		return is_dir(substr($this->sem, 0, strrpos($this->sem, '/')));
 	}
 
 	/**
@@ -58,7 +58,7 @@ final class FileMutex extends Mutex {
 			return true;
 		}
 
-		if (!\file_exists($this->sem)) {
+		if (!file_exists($this->sem)) {
 			if ((new Exporter($this->sem))->save(true, '', false)) {
 				$this->status = true;
 			}
@@ -67,10 +67,10 @@ final class FileMutex extends Mutex {
 			$busy = include $this->sem;
 
 			if ($blocking) {
-				\set_time_limit(0);
+				set_time_limit(0);
 
 				while ($busy) {
-					\sleep(1);
+					sleep(1);
 					$busy = include $this->sem;
 				}
 			}
@@ -105,7 +105,7 @@ final class FileMutex extends Mutex {
 	 */
 	public function remove(): bool {
 		if ($this->status) {
-			if (!\unlink($this->sem)) {
+			if (!unlink($this->sem)) {
 				Error::log(IO::message('e_unlink', $this->sem), Code::Unlink);
 				return false;
 			}
