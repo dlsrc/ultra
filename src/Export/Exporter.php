@@ -112,7 +112,7 @@ final class Exporter implements Storable {
 	 */
 	private function _makeCode(mixed $variable, string $header, bool $strict): string|null {
 		if ($code = $this->_optimize(var_export($variable, true), $this->_storable($variable))) {
-			if (Mode::Product->current() || '' == $header) {
+			if (Mode::Product() || '' == $header) {
 				$code = '<?php'.$this->_declare($strict)."\n".'return '.$code.';'."\n";
 			}
 			else {
@@ -132,7 +132,7 @@ final class Exporter implements Storable {
 			return $code;
 		}
 		
-		if (Mode::Product->current() || '' == $header) {
+		if (Mode::Product() || '' == $header) {
 			return '<?php'.$this->_declare($strict)."\n".$code."\n";
 		}
 
@@ -189,7 +189,7 @@ final class Exporter implements Storable {
 			);
 		}
 
-		if (Mode::Develop->current()) {
+		if (Mode::Develop()) {
 			return $code;
 		}
 

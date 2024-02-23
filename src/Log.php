@@ -183,11 +183,9 @@ final class Log {
 		$new = false;
 
 		foreach (array_keys($this->_error) as $id) {
-			if (!isset($this->_saved[$id])
-				|| (Mode::Develop->current()
-					&& $this->_saved[$id]->context != $this->_error[$id]->context
-				)
-			) {
+			if (!isset($this->_saved[$id]) || (
+				Mode::Develop()	&& $this->_saved[$id]->context != $this->_error[$id]->context
+			)) {
 				$this->_saved[$id] = $this->_error[$id];
 				$new = true;
 			}
