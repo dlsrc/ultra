@@ -16,7 +16,14 @@
             "role": "Developer"
         }
     ],
+    "autoload": {
+        "psr-4" : {
+            "Ultra\\" : "src/"
+        }
+    },
     "require": {
-        "php": ">=8.3"
+        "php": ">=8.3",
+        "ultra/result": "^1.0.0",
+        "ultra/enum-dominant": "^1.0.2"
     }
 }
