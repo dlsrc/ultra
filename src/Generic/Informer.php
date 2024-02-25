@@ -6,8 +6,9 @@
  */
 namespace Ultra\Generic;
 
+use ReflectionClass;
 use Ultra\Lang;
-use Ultra\ClassMap\Boot;
+use Ultra\Boot;
 
 /**
  * Реализация интерфейса Ultra\Sociable
@@ -99,7 +100,7 @@ trait Informer {
 
 	private static function _instance(string $class): Immutable|null {
 		if (is_subclass_of($class, Immutable::class)) {
-			$class_ref = new \ReflectionClass($class);
+			$class_ref = new ReflectionClass($class);
 
 			if ($class_ref->hasMethod('get')) {
 				$method = $class_ref->getMethod('get');

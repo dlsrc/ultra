@@ -6,6 +6,8 @@
  */
 namespace Ultra\Generic;
 
+use Ultra\IO;
+
 /**
  * Реализация интерфейса Ultra\Property\\Storable.
  */

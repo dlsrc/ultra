@@ -473,7 +473,7 @@ final class Core implements Sociable {
 
 		$this->_logfile   = '';
 		$this->_frequency = 1;
-		$this->_header    = __DIR__.'/header.txt';
+		$this->_header    = dirname(__DIR__).'/header.txt';
 		$this->_shutdown  = false;
 		$this->_fatal     = '';
 		$this->_failure   = false;
