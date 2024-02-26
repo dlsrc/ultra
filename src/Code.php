@@ -6,7 +6,7 @@
  */
 namespace Ultra;
 
-enum Code: int implements namespace\Result\Condition {
+enum Code: int implements Condition {
 	// VALUE RANGE 40 - 60
 	case Filename = 40; // Неверное имя файла
 	case Makedir  = 41; // Ошибка при создании директории

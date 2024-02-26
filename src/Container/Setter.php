@@ -7,6 +7,7 @@
 namespace Ultra;
 
 use Ultra\Generic\Mutable;
+use Ultra\Generic\NamelessGetter;
 use Ultra\Generic\Setter as MutableImpl;
 
 abstract class Setter implements Mutable {

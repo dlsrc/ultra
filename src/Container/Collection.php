@@ -16,7 +16,7 @@ use Ultra\Generic\Name;
 use Ultra\Generic\Named;
 use Ultra\Generic\Storable;
 
-abstract class Collection implements Named, Exportable, Storable, Extendable, Immutable, ImportableNamed {
+abstract class Collection implements Called, Exportable, Storable, Extendable, Immutable, ImportableNamed {
 	use Collector;
 	use Getter;
 	use Name;

@@ -10,6 +10,7 @@ use Ultra\Generic\ImportableNameless;
 use Ultra\Generic\Mutable;
 use Ultra\Generic\Nameless;
 use Ultra\Generic\Setter;
+use Ultra\Generic\Storable;
 
 abstract class Set implements Mutable, Exportable, Storable, ImportableNameless {
 	use Setter;

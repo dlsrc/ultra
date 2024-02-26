@@ -12,8 +12,9 @@ use Ultra\Generic\Immutable;
 use Ultra\Generic\ImportableNamed;
 use Ultra\Generic\Name;
 use Ultra\Generic\Named;
+use Ultra\Generic\Storable;
 
-abstract class Dictionary implements Named, Exportable, Storable, Immutable, ImportableNamed {
+abstract class Dictionary implements Called, Exportable, Storable, Immutable, ImportableNamed {
 	use Getter;
 	use Name;
 	use Named;
