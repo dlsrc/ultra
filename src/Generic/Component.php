@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Реализация интерфейса Ultra\Kit\Attachable.
+ * Реализация интерфейса Ultra\Generic\Attachable.
  */
 trait Component {
 	final public function getState(Extendable $ext): array {

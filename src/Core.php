@@ -11,10 +11,6 @@ use Error as InternalError;
 use Throwable;
 use Ultra\Generic\Informer;
 use Ultra\Generic\Sociable;
-use Ultra\Result\Condition;
-use Ultra\Result\Fail;
-use Ultra\Result\State;
-use Ultra\Result\Status;
 
 final class Core implements Sociable {
 	use Informer;

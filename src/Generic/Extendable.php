@@ -8,7 +8,7 @@ namespace Ultra\Generic;
 
 /**
  * Интерфейс, состав свойств которого можно расширять свойствами другого контейнера,
- * реализующего интерфейс Ultra\Kit\Attachable.
+ * реализующего интерфейс Ultra\Generic\Attachable.
  */
 interface Extendable {
 	public function attach(Attachable $att, bool $new_only = false): void;

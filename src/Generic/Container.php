@@ -9,8 +9,8 @@ namespace Ultra\Generic;
 /**
  * Обобщенная реализация основных статических методов для операций с контейнерами свойств.
  * Предполагается, что трейт должен быть задействован в абстракрных классах.
- * Анонимное обращение к контейнеру методами Ultra\Kit\Container::drop(),
- * Ultra\Kit\Container::exists() и Ultra\Kit\Container::open() должно выполняться
+ * Анонимное обращение к контейнеру методами Ultra\Generic\Container::drop(),
+ * Ultra\Generic\Container::exists() и Ultra\Generic\Container::open() должно выполняться
  * конкретным расширяющим классом, но не из абстракции.
  */
 trait Container {

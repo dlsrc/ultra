@@ -6,11 +6,12 @@
  */
 namespace Ultra;
 
-use Ultra\Dominant\BackedEnum as Dominant;
-use Ultra\Dominant\BackedCase;
+use Ultra\Enum\BackedDominant;
+use Ultra\Enum\BackedDominantCase;
 
-enum Lang: string implements Dominant {
-	use BackedCase;
+
+enum Lang: string implements BackedDominant {
+	use BackedDominantCase;
 
 	case ru = '1';
 	case en = '2';

@@ -8,7 +8,7 @@ namespace Ultra\Generic;
 
 /**
  * Интерфейс контейнера, чьи свойства способны присоединяться к свойствам другого,
- * расширяемого контейнера (см. Ultra\Kit\Extendable).
+ * расширяемого контейнера (см. Ultra\Generic\Extendable).
  */
 interface Attachable {
 	public function getState(Extendable $ext): array;

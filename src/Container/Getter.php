@@ -4,7 +4,7 @@
  * This source code is part of the Ultra library.
  * Please see the LICENSE file for copyright and licensing information.
  */
-namespace Ultra\Container;
+namespace Ultra;
 
 use Ultra\Generic\Getter as ImmutableImpl;
 use Ultra\Generic\Immutable;

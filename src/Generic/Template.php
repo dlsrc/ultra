@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Интерфейс шаблона, возвращаемый Ultra\Container\Sociable::pattern()
+ * Интерфейс шаблона, возвращаемый Ultra\Generic\Sociable::pattern()
  */
 interface Template {
 	public function replace(string ...$context): string;

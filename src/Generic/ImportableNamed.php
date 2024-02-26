@@ -6,8 +6,8 @@
  */
 namespace Ultra\Generic;
 
-use Ultra\Export\Exportable;
-use Ultra\Result\State;
+use Ultra\Exportable;
+use Ultra\State;
 
 /**
  * Интерфейс именованных, импортируемых из файла объектов.

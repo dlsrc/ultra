@@ -4,14 +4,13 @@
  * This source code is part of the Ultra library.
  * Please see the LICENSE file for copyright and licensing information.
  */
-namespace Ultra\Export;
+namespace Ultra;
 
-use Ultra\Core;
 use Ultra\Generic\Filename;
 use Ultra\Generic\Called;
 
 /**
- * Общая реализация интерфейса Ultra\Export\Exportable.
+ * Общая реализация интерфейса Ultra\Exportable.
  */
 trait Replica {
 	use Filename;
@@ -20,10 +19,10 @@ trait Replica {
 	/**
 	 * Флаг состояния объекта, указывающий на необходимость экспорта.
 	 * Принимает одно из значений:
-	 * Ultra\Export\Save::Nothing;
-	 * Ultra\Export\Save::NoError;
-	 * Ultra\Export\Save::Destruct;
-	 * Ultra\Export\Save::Now;
+	 * Ultra\Save::Nothing;
+	 * Ultra\Save::NoError;
+	 * Ultra\Save::Destruct;
+	 * Ultra\Save::Now;
 	 */
 	private Save $_save;
 

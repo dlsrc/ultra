@@ -4,10 +4,10 @@
  * This source code is part of the Ultra library.
  * Please see the LICENSE file for copyright and licensing information.
  */
-namespace Ultra\Export;
+namespace Ultra;
 
 /**
- * Реализация по умолчанию для интерфейса Ultra\Export\CallableState.
+ * Реализация по умолчанию для интерфейса Ultra\CallableState.
  */
 trait SetState {
 	final public static function __set_state(array $state): static {

@@ -6,13 +6,6 @@
  */
 namespace Ultra;
 
-use Ultra\Export\CallableState;
-use Ultra\Export\SetStateCall;
-use Ultra\Result\Condition;
-use Ultra\Result\State;
-use Ultra\Result\Status;
-use Ultra\Result\Suspense;
-
 /**
  * Ошибка, хранимая в виде объекта в файле журнала.
  */
@@ -131,9 +124,9 @@ final readonly class Error implements CallableState, State {
 	}
 
 	/**
-	 * Пытаться преобразовать интерфейс Ultra\Result\State в объект Ultra\Error, в случае
+	 * Пытаться преобразовать интерфейс Ultra\State в объект Ultra\Error, в случае
 	 * преобразования добавить его в журнал и вернуть новый или тот-же самый интерфейс
-	 * Ultra\Result\State.
+	 * Ultra\State.
 	 * Если в качестве аргумента был передан объект несущий успешное состояние, то будет
 	 * возвращён этот же объект. Если такой объект содержал ссылку на объект его породивший и не
 	 * являющийся валидным, то породивший объект будет преобразован в Ultra\Error, если таковым
@@ -141,7 +134,7 @@ final readonly class Error implements CallableState, State {
 	 * В остальных случаях будет возвращён новый или готовый объект Ultra\Error.
 	 * 
 	 * Данный метод может быть передан в качестве параметра $reject в методы expect(), fetch(),
-	 * follow() и recover() интерфейса Ultra\Result\State.
+	 * follow() и recover() интерфейса Ultra\State.
 	 */
 	public static function from(State $state, string|null $context = null, bool $fatal = false): State {
 		if ($state->valid()) {

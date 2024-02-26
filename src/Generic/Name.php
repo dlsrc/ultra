@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Общая реализация интерфейса Ultra\Container\Named.
+ * Общая реализация интерфейса Ultra\Generic\Called.
  */
 trait Name {
 	private string $_name;

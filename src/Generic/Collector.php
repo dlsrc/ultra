@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Реализация интерфейса Ultra\Kit\Extendable.
+ * Реализация интерфейса Ultra\Generic\Extendable.
  */
 trait Collector {
 	abstract protected function getAttachedPropertyHandler(string $property): callable|null;

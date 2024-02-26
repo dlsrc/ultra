@@ -6,8 +6,9 @@
  */
 namespace Ultra;
 
-use Ultra\Dominant\UnitEnum as Dominant;
-use Ultra\Dominant\UnitCase;
+use Ultra\Enum\Dominant;
+use Ultra\Enum\DominantCase;
+
 /**
  * Преречисление наиболее общих режимов работы для всех библиотек и приложений.
  * Рекомендуется использовать, если приложения не имеют своей собственной системы
@@ -15,7 +16,7 @@ use Ultra\Dominant\UnitCase;
  * режима Ultra\PreferredCase.
  */
 enum Mode implements Dominant {
-	use UnitCase;
+	use DominantCase;
 
 	case Product;
 	case Develop;

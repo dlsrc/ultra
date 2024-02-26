@@ -14,48 +14,59 @@ final class Registry {
 	/**
 	 * Флаг пройденной перезагрузки реестра.
 	 */
-	private static bool $done = false;
+	private static bool $_done = false;
 
 	/**
 	 * Запросить построение (перезагрузку) реестра классов.
 	 */
 	public static function build(Boot $b): void {
-		if (self::$done) {
+		if (self::$_done) {
 			return;
 		}
+/*
+		spl_autoload_register((new class ([
+			['ns' => 'Ultra\\',       'path' => '/core/src/',],
+			['ns' => 'Ultra\\',	      'path' => '/result/src/',],
+			['ns' => 'Ultra\\Enum\\', 'path' => '/enum-dominant/src/',],
+			['ns' => 'Ultra\\Enum\\', 'path' => '/enum-cases/src/',],
+			['ns' => 'Ultra\\',       'path' => '/core/src/Export/',],
+			['ns' => 'Ultra\\',       'path' => '/core/src/Container/',],
+		], dirname(__DIR__, 2)) {
+			public function load ($class) {
+				foreach ($this->register as $lib) {
+					if (!str_starts_with($class, $lib['ns'])) {
+						continue;
+					}
+
+					$file = strtr(
+						$this->basedir.$lib['path'].substr($class, strlen($lib['ns'])).'.php',
+						'\\', '/'
+					);
+
+					if (is_readable($file)) {
+						require $file;
+						break;
+					}
+				}
+			}
+
+			public function __construct (private array $register, private string $basedir) {}
+		})->load(...), true, true);
+*/
+		//include $b->basepath.'/enum-dominant/src/Dominant.php';
+		//include $b->basepath.'/enum-dominant/src/BackedDominant.php';
+		//include $b->basepath.'/enum-dominant/src/DominantCase.php';
+		//include $b->basepath.'/enum-dominant/src/BackedDominantCase.php';
+
+		(new Registry)->create($b);
+		self::$_done = true;
+		return;
 
 		$key = ftok(__FILE__, 'b');
 
 		if (-1 == $key) {
 			return;
 		}
-
-		spl_autoload_register(function ($class) {
-			$basedir = strtr(dirname(__DIR__, 2), '\\', '/');
-
-			$register = [
-				['prefix' => 'Ultra\\Result\\',	'folder' => '/result/src/',],
-				['prefix' => 'Ultra\\Dominant\\', 'folder' => '/enum-dominant/src/',],
-				['prefix' => 'Ultra\\Enum\\', 'folder' => '/enum-cases/src/',],
-				['prefix' => 'Ultra\\', 'folder' => '/core/src/',],
-			];
-	
-			foreach ($register as $lib) {
-				$len = strlen($lib['prefix']);
-	
-				if (strncmp($lib['prefix'], $class, $len) !== 0) {
-					continue;
-				}
-	
-				$relative_class = substr($class, $len);
-				$file = $basedir.$lib['folder'].str_replace('\\', '/', $relative_class) . '.php';
-	
-				if (is_readable($file)) {
-					require $file;
-					break;
-				}
-			}
-		}, true, true);
 
 		if (extension_loaded('sysvsem')) {
 			$mtx = namespace\Sync\SysVSem::get($key);
@@ -65,19 +76,19 @@ final class Registry {
 		}
 		else {
 			$mtx = namespace\Sync\File::get($key);
-			$mtx->setpath(dirname($b->registry_folder));
+			$mtx->setpath(dirname($b->registry));
 		}
 
 		if ($mtx->acquire()) {
 			(new Registry)->create($b);
-			self::$done = true;
+			self::$_done = true;
 			$mtx->release();
 			return;
 		}
 
 		if ($b->wait) {
 			if ($mtx->acquire(true)) {
-				self::$done = true;
+				self::$_done = true;
 				$mtx->release();
 			}
 		}
@@ -139,8 +150,8 @@ final class Registry {
 	 * Построение реестра классов с передачей результата в загрузчик классов.
 	 */
 	public function create(Boot $b): void {
-		$library = array_values($b->code_library);
-		$excluded = $b->excluded_folder;
+		$library = array_values($b->source);
+		$excluded = $b->excluded;
 		$extension = $b->extension;
 
 		if (empty($extension)) {

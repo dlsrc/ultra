@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Реализация интерфейса Ultra\Kit\Immutable.
+ * Реализация интерфейса Ultra\Generic\Immutable.
  */
 trait Getter {
 	abstract protected function initialize(): void;

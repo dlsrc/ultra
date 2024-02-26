@@ -7,7 +7,7 @@
 namespace Ultra\Lang\it;
 
 use Ultra\Core as Ultra;
-use Ultra\Container\Getter;
+use Ultra\Getter;
 
 final class Core extends Getter {
 	protected function initialize(): void {

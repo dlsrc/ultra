@@ -18,12 +18,12 @@
     ],
     "autoload": {
         "psr-4" : {
-            "Ultra\\" : "src/"
+            "Ultra\\" : ["src/", "src/Container", "src/Export"]
         }
     },
     "require": {
         "php": ">=8.3",
-        "ultra/result": "^1.0.0",
-        "ultra/enum-dominant": "^1.0.2"
+        "ultra/result": "^1.0.1",
+        "ultra/enum-dominant": "^1.0.3"
     }
 }

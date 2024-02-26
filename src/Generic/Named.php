@@ -9,14 +9,14 @@ namespace Ultra\Generic;
 use Ultra\Code;
 use Ultra\Core;
 use Ultra\Error;
-use Ultra\Result\Fail;
-use Ultra\Result\State;
-use Ultra\Result\Status;
-use Ultra\Export\Save;
-use Ultra\Export\Exportable;
+use Ultra\Exportable;
+use Ultra\Fail;
+use Ultra\Save;
+use Ultra\State;
+use Ultra\Status;
 
 /**
- * Реализация интерфейса Ultra\Kit\ImportableNamed
+ * Реализация интерфейса Ultra\Generic\ImportableNamed
  */
 trait Named {
 	use NamedGetter;

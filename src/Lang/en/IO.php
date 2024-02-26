@@ -6,7 +6,7 @@
  */
 namespace Ultra\Lang\en;
 
-use Ultra\Container\Getter;
+use Ultra\Getter;
 
 final class IO extends Getter {
 	protected function initialize(): void {

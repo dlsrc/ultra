@@ -10,9 +10,9 @@ use Ultra\Code;
 use Ultra\Core;
 use Ultra\Error;
 use Ultra\IO;
-use Ultra\Result\Instance;
-use Ultra\Result\State;
-use Ultra\Result\Status;
+use Ultra\Instance;
+use Ultra\State;
+use Ultra\Status;
 
 /**
  * Мьютексы на основе эсклюзивно захваченных семафорах, когда \SyncMutex неприменимы.

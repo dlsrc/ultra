@@ -4,7 +4,7 @@
  * This source code is part of the Ultra library.
  * Please see the LICENSE file for copyright and licensing information.
  */
-namespace Ultra\Export;
+namespace Ultra;
 
 /**
  * Интерфейс объекта способного быть вызванным после экспорта.

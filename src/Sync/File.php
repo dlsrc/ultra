@@ -8,8 +8,8 @@ namespace Ultra\Sync;
 
 use Ultra\Code;
 use Ultra\Error;
+use Ultra\Exporter;
 use Ultra\IO;
-use Ultra\Export\Exporter;
 
 /**
  * Файловый эмулятор мьютекса. Использовать, если недоступны функции межпроцессного

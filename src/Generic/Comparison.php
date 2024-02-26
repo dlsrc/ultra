@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Реализация интерфейса Ultra\Kit\Comparable.
+ * Реализация интерфейса Ultra\Generic\Comparable.
  */
 trait Comparison {
 	final public function isCompatible(Immutable $getter, string $property = '_property', bool $by_vals = false): bool {

@@ -6,10 +6,6 @@
  */
 namespace Ultra;
 
-use Ultra\Export\Exporter;
-use Ultra\Result\Condition;
-use Ultra\Result\Status;
-
 final class Log {
 	private static self|null $_log = null;
 	

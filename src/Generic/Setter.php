@@ -7,7 +7,7 @@
 namespace Ultra\Generic;
 
 /**
- * Реализация интерфейса Ultra\Kit\Mutable.
+ * Реализация интерфейса Ultra\Generic\Mutable.
  */
 trait Setter {
 	use Getter;
