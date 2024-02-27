@@ -151,13 +151,9 @@ final class Boot {
 	 * $load - флаг немедленной загрузки всех классов перечисленных в ветке. По умолчанию
 	 * FALSE - классы загружаются по требованию (__autoload()).
 	 */
-	public static function branch(string $name, bool $load = false): void {
+	public static function branch(string $name): void {
 		if (self::$_boot) {
 			self::$_boot->changeBranch($name);
-
-			if ($load) {
-				self::$_boot->includeBranch();
-			}
 		}
 	}
 
@@ -365,8 +361,6 @@ final class Boot {
 	 */
 	private function reboot(): void {
 		include_once __DIR__.'/registry.php';
-//		$this->involved[$this->branch_file] = [];
-//		$this->involved[self::WHOLE_MAP] = [];
 		Registry::build($this);
 	}
 
@@ -464,18 +458,6 @@ final class Boot {
 		}
 		else {
 			$this->involved[$this->branch_file] = [];
-		}
-	}
-
-	/**
-	 * Подключить все файлы перечисленные в ветке
-	 * Вызывается из Ultra\Boot::branch().
-	 */
-	public function includeBranch(): void {
-		foreach ($this->involved[$this->branch_file] as $file) {
-			if (file_exists($file)) {
-				include_once $file;
-			}
 		}
 	}
 

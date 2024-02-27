@@ -36,7 +36,7 @@ interface Exportable extends Storable, CallableState {
 	 * 
 	 * Класс, реализующий интерфейс Ultra\Exportable, должен самостоятельно вычислять файл
 	 * по умолчанию для сохранения объектов на его основе. В большинстве случаев, достаточно
-	 * задействовать трейт Ultra\Filename, реализующий интерфейс Ultra\Storable.
+	 * задействовать трейт Ultra\Generic\Filename, реализующий интерфейс Ultra\Generic\Storable.
 	 */
 	public function export(string $file = '', Save $save = Save::NoError): void;
 

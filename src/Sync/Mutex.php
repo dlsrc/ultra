@@ -58,7 +58,7 @@ abstract class Mutex implements State {
 	/**
 	 * Объект экземпляр или имя файла семафора.
 	 */
-	protected \SysvSemaphore|\Shmop|string|false $sem;
+	protected object|string|false $sem;
 
 	/**
 	 * Флаг состояния мьютекса относительно текущего процесса

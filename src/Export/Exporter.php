@@ -198,7 +198,7 @@ final class Exporter implements Storable {
 	}
 	
 	/**
-	 * Выявляет интерфейс Ultra\Storable в экспортируемой переменной.
+	 * Выявляет интерфейс Ultra\Generic\Storable в экспортируемой переменной.
 	 */
 	private function _storable(mixed $variable): bool {
 		if (is_object($variable) && ($variable instanceof Storable)) {

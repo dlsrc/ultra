@@ -1,5 +1,6 @@
 {
     "name": "ultra/core",
+    "version": "1.0.2",
     "type": "library",
     "description": "This package is a core part of the Ultra library.",
     "license": "MIT",
@@ -18,12 +19,12 @@
     ],
     "autoload": {
         "psr-4" : {
-            "Ultra\\" : ["src/", "src/Container", "src/Export"]
+            "Ultra\\" : ["src/", "src/Container/", "src/Export/"]
         }
     },
     "require": {
         "php": ">=8.3",
-        "ultra/result": "^1.0.1",
-        "ultra/enum-dominant": "^1.0.3"
+        "ultra/result": "^1.0.0",
+        "ultra/enum-dominant": "^1.0.0"
     }
 }

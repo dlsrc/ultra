@@ -23,75 +23,9 @@ final class Registry {
 		if (self::$_done) {
 			return;
 		}
-/*
-		spl_autoload_register((new class ([
-			['ns' => 'Ultra\\',       'path' => '/core/src/',],
-			['ns' => 'Ultra\\',	      'path' => '/result/src/',],
-			['ns' => 'Ultra\\Enum\\', 'path' => '/enum-dominant/src/',],
-			['ns' => 'Ultra\\Enum\\', 'path' => '/enum-cases/src/',],
-			['ns' => 'Ultra\\',       'path' => '/core/src/Export/',],
-			['ns' => 'Ultra\\',       'path' => '/core/src/Container/',],
-		], dirname(__DIR__, 2)) {
-			public function load ($class) {
-				foreach ($this->register as $lib) {
-					if (!str_starts_with($class, $lib['ns'])) {
-						continue;
-					}
-
-					$file = strtr(
-						$this->basedir.$lib['path'].substr($class, strlen($lib['ns'])).'.php',
-						'\\', '/'
-					);
-
-					if (is_readable($file)) {
-						require $file;
-						break;
-					}
-				}
-			}
-
-			public function __construct (private array $register, private string $basedir) {}
-		})->load(...), true, true);
-*/
-		//include $b->basepath.'/enum-dominant/src/Dominant.php';
-		//include $b->basepath.'/enum-dominant/src/BackedDominant.php';
-		//include $b->basepath.'/enum-dominant/src/DominantCase.php';
-		//include $b->basepath.'/enum-dominant/src/BackedDominantCase.php';
 
 		(new Registry)->create($b);
 		self::$_done = true;
-		return;
-
-		$key = ftok(__FILE__, 'b');
-
-		if (-1 == $key) {
-			return;
-		}
-
-		if (extension_loaded('sysvsem')) {
-			$mtx = namespace\Sync\SysVSem::get($key);
-		}
-		elseif (extension_loaded('shmop')) {
-			$mtx = namespace\Sync\Shmop::get($key);
-		}
-		else {
-			$mtx = namespace\Sync\File::get($key);
-			$mtx->setpath(dirname($b->registry));
-		}
-
-		if ($mtx->acquire()) {
-			(new Registry)->create($b);
-			self::$_done = true;
-			$mtx->release();
-			return;
-		}
-
-		if ($b->wait) {
-			if ($mtx->acquire(true)) {
-				self::$_done = true;
-				$mtx->release();
-			}
-		}
 	}
 
 	private function __construct() {}
