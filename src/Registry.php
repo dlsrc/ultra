@@ -6,6 +6,8 @@
  */
 namespace Ultra;
 
+use Throwable;
+
 /**
  * Выделенная из класса загрузчика ресурсоемкая, редко исполняемая	процедура создания и
  * обновления главного реестра классов.
@@ -23,9 +25,48 @@ final class Registry {
 		if (self::$_done) {
 			return;
 		}
-
+/*
 		(new Registry)->create($b);
 		self::$_done = true;
+		return;
+*/
+		try {
+			self::loadCore($b->basepath);
+
+			$key = ftok(__FILE__, 'b');
+
+			if (-1 == $key) {
+				return;
+			}
+	
+			if (extension_loaded('sysvsem')) {
+				$mtx = namespace\Sync\SysVSem::get($key);
+			}
+			elseif (extension_loaded('shmop')) {
+				$mtx = namespace\Sync\Shmop::get($key);
+			}
+			else {
+				$mtx = namespace\Sync\File::get($key);
+				$mtx->setpath(dirname($b->registry));
+			}
+		}
+		catch (Throwable $e) {
+			exit($e->getMessage());
+		}
+
+		if ($mtx->acquire()) {
+			(new Registry)->create($b);
+			self::$_done = true;
+			$mtx->release();
+			return;
+		}
+
+		if ($b->wait && Core::get()->cli) {
+			if ($mtx->acquire(true)) {
+				self::$_done = true;
+				$mtx->release();
+			}
+		}
 	}
 
 	private function __construct() {}
@@ -172,5 +213,80 @@ final class Registry {
 		}
 
 		$b->addRegister($register);
+	}
+
+	private static function loadCore(string $ultra_path): void {
+		include_once $ultra_path.'/result/src/State.php';
+		include_once $ultra_path.'/enum-cases/src/Cases.php';
+	  //  include_once $ultra_path.'/enum-cases/src/CaseFinder.php';
+		include_once $ultra_path.'/enum-dominant/src/Dominant.php';
+		include_once $ultra_path.'/enum-dominant/src/DominantCase.php';
+		include_once $ultra_path.'/enum-dominant/src/BackedDominant.php';
+		include_once $ultra_path.'/enum-dominant/src/BackedDominantCase.php';
+	  //  include_once $ultra_path.'/core/src/Boot.php';
+		include_once $ultra_path.'/core/src/Export/CallableState.php';
+	  //  include_once $ultra_path.'/chars/src/Key.php';
+	  //  include_once $ultra_path.'/chars/src/Transform.php';
+	  //  include_once $ultra_path.'/chars/src/Translit.php';
+		include_once $ultra_path.'/result/src/Condition.php';
+		include_once $ultra_path.'/core/src/Code.php';
+		include_once $ultra_path.'/core/src/Generic/Storable.php';
+	  //  include_once $ultra_path.'/core/src/Export/Exportable.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Attachable.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Called.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Collector.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Comparable.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Comparison.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Component.php';
+		include_once $ultra_path.'/core/src/Generic/Container.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Extendable.php';
+		include_once $ultra_path.'/core/src/Generic/Filename.php';
+		include_once $ultra_path.'/core/src/Generic/Getter.php';
+	  //  include_once $ultra_path.'/core/src/Generic/GetterCall.php';
+		include_once $ultra_path.'/core/src/Generic/Immutable.php';
+	  //  include_once $ultra_path.'/core/src/Generic/ImportableNamed.php';
+	  //  include_once $ultra_path.'/core/src/Generic/ImportableNameless.php';
+		include_once $ultra_path.'/core/src/Generic/Informer.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Mutable.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Name.php';
+	  //  include_once $ultra_path.'/core/src/Generic/NamedGetter.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Named.php';
+		include_once $ultra_path.'/core/src/Generic/NamelessGetter.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Nameless.php';
+	  //  include_once $ultra_path.'/core/src/Generic/Setter.php';
+		include_once $ultra_path.'/core/src/Generic/Sociable.php';
+		include_once $ultra_path.'/core/src/Generic/Template.php';
+		include_once $ultra_path.'/core/src/Export/SetState.php';
+		include_once $ultra_path.'/core/src/Export/SetStateDirectly.php';
+	  //  include_once $ultra_path.'/core/src/Export/Replica.php';
+		include_once $ultra_path.'/core/src/Core.php';
+		include_once $ultra_path.'/result/src/Suspense.php';
+		include_once $ultra_path.'/core/src/Error.php';
+		include_once $ultra_path.'/core/src/Export/Exporter.php';
+	  //  include_once $ultra_path.'/result/src/Fail.php';
+		include_once $ultra_path.'/core/src/IO.php';
+		include_once $ultra_path.'/result/src/Instance.php';
+		include_once $ultra_path.'/core/src/Lang.php';
+		include_once $ultra_path.'/core/src/Log.php';
+		include_once $ultra_path.'/core/src/Mode.php';
+	  //  include_once $ultra_path.'/core/src/Registry.php';
+	  //  include_once $ultra_path.'/result/src/Wrapper.php';
+	  //  include_once $ultra_path.'/result/src/Result.php';
+	  //  include_once $ultra_path.'/core/src/Export/Save.php';
+		include_once $ultra_path.'/result/src/Status.php';
+	  //  include_once $ultra_path.'/result/src/Substitute.php';
+		include_once $ultra_path.'/core/src/Sync/Mutex.php';
+		include_once $ultra_path.'/core/src/Sync/File.php';
+		include_once $ultra_path.'/core/src/Sync/Shmop.php';
+		include_once $ultra_path.'/core/src/Sync/SysVSem.php';
+	  //  include_once $ultra_path.'/core/src/Container/Collection.php';
+	  //  include_once $ultra_path.'/core/src/Container/Dictionary.php';
+		include_once $ultra_path.'/core/src/Container/Getter.php';
+	  //  include_once $ultra_path.'/core/src/Container/Kit.php';
+	  //  include_once $ultra_path.'/core/src/Container/Set.php';
+	  //  include_once $ultra_path.'/core/src/Container/Setter.php';
+	  //  include_once $ultra_path.'/core/src/Container/Volume.php';
+		include_once $ultra_path.'/core/src/Lang/'.Lang::getMainName().'/Core.php';
+		include_once $ultra_path.'/core/src/Lang/'.Lang::getMainName().'/IO.php';
 	}
 }
