@@ -153,7 +153,7 @@ final class Core implements Sociable {
 		}
 		else {
 			Error::from(
-				value: $error,
+				state: $error,
 				fatal: true,
 			);
 		}
@@ -441,7 +441,7 @@ final class Core implements Sociable {
 		$type = Status::tryFrom($e['type']) ?? Status::Warning;
 
 		Error::from(
-			value: new Fail(
+			state: new Fail(
 				type:    $type,
 				message: $e['message'],
 				file:    $e['file'],
@@ -511,7 +511,7 @@ final class Core implements Sociable {
 		$type = Status::tryFrom($errno) ?? Status::UserWarning;
 
 		Error::from(
-			value: new Fail(
+			state: new Fail(
 				type:    $type,
 				message: $errstr,
 				file:    $errfile,
@@ -546,7 +546,7 @@ final class Core implements Sociable {
 		$type = Status::tryFrom($code) ?? Status::Exception;
 
 		Error::from(
-			value: new Fail(
+			state: new Fail(
 				type:    $type,
 				message: $ex->getMessage(),
 				file:    $ex->getFile(),

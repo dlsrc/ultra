@@ -10,6 +10,7 @@ use Ultra\Code;
 use Ultra\Core;
 use Ultra\Error;
 use Ultra\Exportable;
+use Ultra\Instance;
 use Ultra\Fail;
 use Ultra\Save;
 use Ultra\State;
@@ -17,8 +18,10 @@ use Ultra\Status;
 
 /**
  * Реализация интерфейса Ultra\Generic\ImportableNamed
+ * Типаж Ultra\Instance добавляет поддержку интерфейса Ultra\State
  */
 trait Named {
+	use Instance;
 	use NamedGetter;
 	
 	final public static function load(string $file, string $name = ''): State {

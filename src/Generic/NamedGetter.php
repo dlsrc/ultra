@@ -18,7 +18,7 @@ trait NamedGetter {
 		}
 
 		if (!isset(self::$_container[$name])) {
-			if (is_subclass_of(static::class, Named::class)) {
+			if (is_subclass_of(static::class, Called::class)) {
 				self::$_container[$name] = new static([], $name);
 			}
 			else {

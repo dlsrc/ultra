@@ -11,14 +11,17 @@ use Ultra\Core;
 use Ultra\Error;
 use Ultra\Exportable;
 use Ultra\Fail;
+use Ultra\Instance;
 use Ultra\Save;
 use Ultra\State;
 use Ultra\Status;
 
 /**
  * Реализация интерфейса Ultra\Generic\ImportableNameless
+ * Типаж Ultra\Instance добавляет поддержку интерфейса Ultra\State
  */
 trait Nameless {
+	use Instance;
 	use NamelessGetter;
 
 	final public static function load(string $file): State {
