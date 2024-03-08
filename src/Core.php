@@ -8,6 +8,7 @@ namespace Ultra;
 
 use Closure;
 use Error as InternalError;
+use ErrorException;
 use Throwable;
 use Ultra\Generic\Informer;
 use Ultra\Generic\Sociable;
@@ -527,7 +528,7 @@ final class Core implements Sociable {
 	 * Обработчик исключений.
 	 */
 	private function _exceptionHandler(Throwable $ex): void {
-		if (method_exists($ex, 'getSeverity')) {
+		if ($ex instanceof ErrorException) {
 			$code = (int) $ex->getSeverity();
 		}
 		else {

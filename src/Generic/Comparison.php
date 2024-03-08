@@ -37,7 +37,7 @@ trait Comparison {
 		return true;
 	}
 
-	public function isEqual(Comparable $with, string $property = '_property', bool $by_vals = false): bool {
+	public function isEqual(Comparable & Immutable $with, string $property = '_property', bool $by_vals = false): bool {
 		if (!$this->isCompatible($with, $property, $by_vals)) {
 			return false;
 		}

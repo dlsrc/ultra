@@ -49,7 +49,7 @@ class SetStateDirectly {
 			return false;
 		}
 
-		if ('array' != $p[0]->getType()->getName()) {
+		if ('array' != $p[0]->getType()) {
 			return false;
 		}
 

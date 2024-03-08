@@ -116,7 +116,7 @@ trait Informer {
 				if ($method->isPublic()) {
 					$param = $method->getParameters();
 
-					if (isset($param[0]) && $param[0]->hasType() && 'array' == $param[0]->getType()->getName()) {
+					if (isset($param[0]) && $param[0]->hasType() && 'array' == $param[0]->getType()) {
 						return new $class([]);
 					}
 				}
