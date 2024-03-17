@@ -8,5 +8,5 @@ namespace Ultra\Generic;
 
 interface Comparable {
 	public function isCompatible(Immutable $getter, string $property = '_property', bool $by_vals = false): bool;
-	public function isEqual(Comparable $with, string $property = '_property', bool $by_vals = false): bool;
+	public function isEqual(Comparable & Immutable $with, string $property = '_property', bool $by_vals = false): bool;
 }

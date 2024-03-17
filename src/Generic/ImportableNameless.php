@@ -7,28 +7,22 @@
 namespace Ultra\Generic;
 
 use Ultra\Exportable;
-use Ultra\State;
-
 /**
  * Интерфейс импорта, экспортированных в файлы объектов контейнеров свойств.
  */
-interface ImportableNameless extends Exportable, State {
+interface ImportableNameless extends Exportable {
 	/**
 	 *
 	 */
-	//public static function load(string $file): static;
-	public static function load(string $file): State;
-
+	public static function load(string $file): static;
 	/**
 	 * 
 	 */
-	//public static function find(string $file): static|null;
-	public static function find(string $file): State;
-
+	public static function find(string $file): static|null;
 	/**
 	 * Перечитать себя заново из файла, если интерфейс Storable поддерживается.
 	 * Пытаться перезаписать себя в контейнерный пул и вернуть полученный объект как интерфейс состояния,
 	 * либо, в случае ошибки оставить пул объектов без изенения и вернуть интерфейс состояния как объект ошибки.
 	 */
-	public function refind(): State;
+	public function refind(): self;
 }
