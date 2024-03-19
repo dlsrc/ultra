@@ -10,10 +10,10 @@ use Ultra\Code;
 use Ultra\Core;
 use Ultra\Error;
 use Ultra\Exportable;
-use Ultra\Fail;
+//use Ultra\Fail;
 use Ultra\Instance;
 use Ultra\Save;
-use Ultra\State;
+//use Ultra\State;
 use Ultra\Status;
 
 /**
@@ -24,7 +24,7 @@ trait Nameless {
 	use Instance;
 	use NamelessGetter;
 
-	final public static function load(string $file): State {
+	final public static function load(string $file): static {
 		if (isset(self::$_container[static::class])) {
 			return self::$_container[static::class];
 		}
@@ -38,26 +38,13 @@ trait Nameless {
 
 			if (!is_object(self::$_container[static::class])) {
 				unlink($file);
-				return Error::log(
-					Core::message(
-						'e_type',
-						$file,
-						gettype(self::$_container[static::class])
-					),
-					Status::Domain
-				);
+				//return Error::log(Core::message('e_type', $file, gettype(self::$_container[static::class])), Status::Domain);
+				Error::log(Core::message('e_type', $file, gettype(self::$_container[static::class])), Status::Domain);
 			}
 			else {
 				unlink($file);
-				return Error::log(
-					Core::message(
-						'e_class',
-						$file,
-						get_class(self::$_container[static::class]),
-						static::class
-					),
-					Status::Domain
-				);
+				//return Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
+				Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
 			}
 		}
 
@@ -74,13 +61,18 @@ trait Nameless {
 		return self::$_container[static::class];
 	}
 
-	final public static function find(string $file): State {
+	final public static function find(string $file, bool $nolog = false): static|null {
 		if (isset(self::$_container[static::class])) {
 			return self::$_container[static::class];
 		}
 
 		if (!is_readable($file)) {
-			return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
+			//return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
+			if (!$nolog) {
+				Error::log('File "'.$file.'" not found or not readable.', Code::Nofile);
+			}
+
+			return null;
 		}
 
 		self::$_container[static::class] = include $file;
@@ -89,15 +81,24 @@ trait Nameless {
 			return self::$_container[static::class];
 		}
 
+		if (is_object(self::$_container[$name])) {
+			$message = 'Unexpected object type '.self::$_container[$name]::class.', expected '.static::class.'.';
+		}
+		else {
+			$message = 'Unexpected type: '.gettype(self::$_container[$name]).', expected '.static::class.'.';
+		}
+
+		//return new Fail(Status::Noobject, $message, __FILE__, __LINE__);
+		Error::log($message, Status::Noobject);
 		unset(self::$_container[static::class]);
-		return new Fail(Status::Noobject, 'Unexpected object type.', __FILE__, __LINE__);
+		return null;
 	}
 
-	final public function refind(): State {
+	final public function refind(): self {
 		$name = get_class($this);
 		self::drop($name);
 
-		if (!$refind = self::find($this->_file)) {
+		if (!$refind = self::find($this->_file, true)) {
 			self::add($this, $name);
 			return $this;
 		}

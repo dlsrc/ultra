@@ -18,7 +18,7 @@ interface ImportableNamed extends Exportable {
 	/**
 	 * 
 	 */
-	public static function find(string $file, string $name = ''): static|null;
+	public static function find(string $file, string $name = '', bool $nolog = false): static|null;
 	/**
 	 * Перечитать себя заново из файла, если интерфейс Storable поддерживается.
 	 * Пытаться перезаписать себя в контейнерный пул и вернуть полученный объект как интерфейс состояния,
