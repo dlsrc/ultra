@@ -68,7 +68,7 @@ trait Nameless {
 
 		if (!is_readable($file)) {
 			//return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
-			if (!$log) {
+			if ($log) {
 				Error::log('File "'.$file.'" not found or not readable.', Code::Nofile);
 			}
 
