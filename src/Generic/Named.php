@@ -65,7 +65,7 @@ trait Named {
 		return self::$_container[$name];
 	}
 
-	final public static function find(string $file, string $name = '', bool $nolog = false): static|null {
+	final public static function find(string $file, string $name = '', bool $log = false): static|null {
 		if ('' == $name) {
 			$name = static::class;
 		}
@@ -76,7 +76,7 @@ trait Named {
 
 		if (!is_readable($file)) {
 			//return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
-			if (!$nolog) {
+			if ($log) {
 				Error::log('File "'.$file.'" not found or not readable.', Code::Nofile);
 			}
 

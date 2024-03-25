@@ -61,14 +61,14 @@ trait Nameless {
 		return self::$_container[static::class];
 	}
 
-	final public static function find(string $file, bool $nolog = false): static|null {
+	final public static function find(string $file, bool $log = false): static|null {
 		if (isset(self::$_container[static::class])) {
 			return self::$_container[static::class];
 		}
 
 		if (!is_readable($file)) {
 			//return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
-			if (!$nolog) {
+			if (!$log) {
 				Error::log('File "'.$file.'" not found or not readable.', Code::Nofile);
 			}
 
