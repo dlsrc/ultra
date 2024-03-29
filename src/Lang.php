@@ -10,20 +10,20 @@ use Ultra\Enum\BackedDominant;
 use Ultra\Enum\BackedDominantCase;
 
 
-enum Lang: string implements BackedDominant {
+enum Lang: int implements BackedDominant {
 	use BackedDominantCase;
 
-	case ru = '1';
-	case en = '2';
-	case ar = '3';
-	case es = '4';
-	case zh = '5';
-	case fr = '6';
-	case de = '7';
-	case ja = '8';
-	case it = '9';
-	case pt = '10';
-	case uk = '11';
+	case ru = 1;
+	case en = 2;
+	case ar = 3;
+	case es = 4;
+	case zh = 5;
+	case fr = 6;
+	case de = 7;
+	case ja = 8;
+	case it = 9;
+	case pt = 10;
+	case uk = 11;
 
 	#[\Override]
 	public static function getDefaultCase(): static {
