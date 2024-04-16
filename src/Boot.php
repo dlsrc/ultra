@@ -367,7 +367,7 @@ final class Boot {
 	 * см. Ultra\Registry
 	 */
 	private function reboot(): void {
-		include_once __DIR__.'/registry.php';
+		include_once __DIR__.'/Registry.php';
 		Registry::build($this);
 	}
 
