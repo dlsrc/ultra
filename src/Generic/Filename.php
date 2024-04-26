@@ -9,7 +9,7 @@ namespace Ultra\Generic;
 use Ultra\IO;
 
 /**
- * Реализация интерфейса Ultra\Property\\Storable.
+ * Реализация интерфейса Ultra\Property\Storable.
  */
 trait Filename {
 	private string $_file;

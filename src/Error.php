@@ -157,9 +157,21 @@ final readonly class Error implements CallableState, State {
 
 		$log = Log::get();
 
-		if ($previous::class == self::class) {
+		if ($previous instanceof self) {
 			if ($fatal) {
-				$error = clone $previous;
+				$error = new Error([
+					'id'      => $previous->id,
+					'message' => $previous->message,
+					'context' => $previous->context,
+					'file'    => $previous->file,
+					'line'    => $previous->line,
+					'type'    => $previous->type,
+					'errno'   => $previous->errno,
+					'fatal'   => true,
+					'time'    => $previous->time,
+					'date'    => $previous->date,
+				]);
+
 				$log->addError($error, true);
 			}
 
@@ -322,22 +334,6 @@ final readonly class Error implements CallableState, State {
 		}
 
 		return "\n".$context;
-	}
-
-	/**
-	 * Клонировать ошибку, как фатальную.
-	 */
-	public function __clone(): void {
-		$this->id      = clone $this->id;
-		$this->message = clone $this->message;
-		$this->context = clone $this->context;
-		$this->file    = clone $this->file;
-		$this->line    = clone $this->line;
-		$this->type    = clone $this->type;
-		$this->errno   = clone $this->errno;
-		$this->fatal   = true;
-		$this->time    = clone $this->time;
-		$this->date    = clone $this->date;
 	}
 
 	private function __construct(array $error) {
