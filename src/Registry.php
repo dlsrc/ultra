@@ -265,6 +265,7 @@ final class Registry {
 		include_once $ultra_path.'/core/src/Export/Exporter.php';
 	  //  include_once $ultra_path.'/result/src/Fail.php';
 		include_once $ultra_path.'/core/src/IO.php';
+		include_once $ultra_path.'/result/src/Valid.php';
 		include_once $ultra_path.'/result/src/Instance.php';
 		include_once $ultra_path.'/core/src/Lang.php';
 		include_once $ultra_path.'/core/src/Log.php';
