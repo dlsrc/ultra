@@ -460,12 +460,12 @@ final class Core implements Sociable {
 		if ('cli' == PHP_SAPI) {
 			$this->cli = true;
 			$this->eol = PHP_EOL;
-			$this->opcache = ("1" == ini_get('opcache.enable_cli'));
+			$this->opcache = ('1' == ini_get('opcache.enable_cli'));
 		}
 		else {
 			$this->cli = false;
 			$this->eol = "\n";
-			$this->opcache = ("1" == ini_get('opcache.enable'));
+			$this->opcache = ('1' == ini_get('opcache.enable'));
 		}
 
 		$this->_logfile   = '';
