@@ -17,7 +17,7 @@ final class Exporter implements Storable {
 	use Filename;
 
 	public function __construct(string $file = '') {
-		$this->_file = $file;
+		$this->filename = $file;
 	}
 
 	/**
@@ -40,11 +40,11 @@ final class Exporter implements Storable {
 	 * соответствия;
 	 */
 	public function save(mixed $variable, string $header = '', bool $strict = true): bool {
-		if ('' == $this->_file) {
+		if ('' == $this->filename) {
 			return false;
 		}
 
-		if (!IO::indir($this->_file)) {
+		if (!IO::indir($this->filename)) {
 			return false;
 		}
 
@@ -52,11 +52,11 @@ final class Exporter implements Storable {
 			return false;
 		}
 
-		if (IO::fw($this->_file, $code) < 0) {
+		if (IO::fw($this->filename, $code) < 0) {
 			return false;
 		}
 
-		Core::get()->invalidate($this->_file);
+		Core::get()->invalidate($this->filename);
 		return true;
 	}
 
@@ -69,11 +69,11 @@ final class Exporter implements Storable {
 	 * соответствия;
 	 */
 	public function put(string $code, string $header = '', bool $strict = true): bool {
-		if ('' == $this->_file) {
+		if ('' == $this->filename) {
 			return false;
 		}
 
-		if (!IO::indir($this->_file)) {
+		if (!IO::indir($this->filename)) {
 			return false;
 		}
 
@@ -81,11 +81,11 @@ final class Exporter implements Storable {
 			$strict = false;
 		}
 
-		if (IO::fw($this->_file, $this->_prepareCode($code, $header, $strict)) < 0) {
+		if (IO::fw($this->filename, $this->_prepareCode($code, $header, $strict)) < 0) {
 			return false;
 		}
 
-		Core::get()->invalidate($this->_file);
+		Core::get()->invalidate($this->filename);
 		return true;
 	}
 
@@ -182,7 +182,7 @@ final class Exporter implements Storable {
 
 		if ($storable) {
 			$code = preg_replace(
-				'/\'_file\'\s*\=>\s*\'[^\']+\'\,/', '\'_file\' => __FILE__,', $code
+				'/\'filename\'\s*\=>\s*\'[^\']+\'\,/', '\'filename\' => __FILE__,', $code
 			);
 		}
 

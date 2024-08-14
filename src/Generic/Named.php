@@ -55,7 +55,7 @@ trait Named {
 		self::$_container[$name] = new static([], $name);
 
 		if (self::$_container[$name] instanceof Storable) {
-			self::$_container[$name]->setFilename($file);
+			self::$_container[$name]->filename = $file;
 
 			if (self::$_container[$name] instanceof Exportable) {
 				self::$_container[$name]->save(Save::NoError);
@@ -106,7 +106,7 @@ trait Named {
 		$name = $this->getName();
 		self::drop($name);
 
-		if (!$refind = self::find($this->_file, $name, true)) {
+		if (!$refind = self::find($this->filename, $name, true)) {
 			self::add($this, $name);
 			return $this;
 		}

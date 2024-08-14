@@ -259,7 +259,7 @@ final class Boot {
 
 			ksort($this->involved[$file]);
 
-			$e->setFilename($this->registry.$file);
+			$e->filename = $this->registry.$file;
 
 			$e->save(
 				$this->involved[$file],

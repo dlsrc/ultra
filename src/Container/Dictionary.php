@@ -31,12 +31,12 @@ abstract class Dictionary implements Called, Exportable, Storable, Immutable, Im
 				$this->_name = $name;
 			}
 
-			$this->_file = '';
+			$this->filename = '';
 			$this->initialize();
 		}
 		else {
 			$this->_name = $state['_name'];
-			$this->_file = $state['_file'];
+			$this->filename = $state['filename'];
 			$this->_property = $state['_property'];
 		}
 	}

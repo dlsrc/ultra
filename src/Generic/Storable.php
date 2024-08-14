@@ -12,6 +12,5 @@ namespace Ultra\Generic;
  * но принципиально нет никакой разницы что будет сохраняться.
  */
 interface Storable {
-	public function getFilename(): string;
-	public function setFilename(string $file): void;
+	public string $filename {set(string $file);}
 }

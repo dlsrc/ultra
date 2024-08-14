@@ -36,7 +36,7 @@ trait Replica {
 	}
 
 	final public function export(string $file = '', Save $save = Save::NoError): void {
-		$this->setFilename($file);
+		$this->filename = $file;
 		$this->save($save);
 	}
 
@@ -48,12 +48,12 @@ trait Replica {
 		if (Save::Now == $save) {
 			$this->_save = Save::Nothing;
 
-			if ('' != $this->_file) {
-				(new Exporter($this->_file))->save(
+			if ('' != $this->filename) {
+				(new Exporter($this->filename))->save(
 					$this,
 					Core::message(
 						'src_header',
-						$this->_file,
+						$this->filename,
 						date('Y'),
 						date('Y-m-d H:i:s'),
 						PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION
@@ -78,7 +78,7 @@ trait Replica {
 			$up = new $type;
 		}
 
-		$up->setFilename($this->_file);
+		$up->filename = $this->filename;
 
 		foreach ($this->_property as $key => $val) {
 			$up->$key = $val;
@@ -88,27 +88,4 @@ trait Replica {
 		self::add($up, $name);
 		return $up;
 	}
-
-/*	final public function refind(): self {
-		if ($this instanceof Called) {
-			$name = $this->getName();
-			self::drop($name);
-
-			if (!$refind = self::find($this->_file, $name)) {
-				self::add($this, $name);
-				return $this;
-			}
-		}
-		else {
-			$name = get_class($this);
-			self::drop($name);
-
-			if (!$refind = self::find($this->_file)) {
-				self::add($this, $name);
-				return $this;
-			}
-		}
-
-		return $refind;
-	}*/
 }

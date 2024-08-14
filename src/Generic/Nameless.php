@@ -51,7 +51,7 @@ trait Nameless {
 		self::$_container[static::class] = new static;
 
 		if (self::$_container[static::class] instanceof Storable) {
-			self::$_container[static::class]->setFilename($file);
+			self::$_container[static::class]->filename = $file;
 
 			if (self::$_container[static::class] instanceof Exportable) {
 				self::$_container[static::class]->save(Save::NoError);
@@ -98,7 +98,7 @@ trait Nameless {
 		$name = get_class($this);
 		self::drop($name);
 
-		if (!$refind = self::find($this->_file, true)) {
+		if (!$refind = self::find($this->filename, true)) {
 			self::add($this, $name);
 			return $this;
 		}

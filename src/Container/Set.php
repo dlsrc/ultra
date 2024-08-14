@@ -21,11 +21,11 @@ abstract class Set implements Mutable, Exportable, Storable, ImportableNameless 
 		$this->_save = Save::Nothing;
 
 		if (empty($state)) {
-			$this->_file = '';
+			$this->filename = '';
 			$this->initialize();
 		}
 		else {
-			$this->_file = $state['_file'];
+			$this->filename = $state['filename'];
 			$this->_property = $state['_property'];
 		}
 	}

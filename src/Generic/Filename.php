@@ -12,15 +12,11 @@ use Ultra\IO;
  * Реализация интерфейса Ultra\Property\Storable.
  */
 trait Filename {
-	private string $_file;
-
-	public function getFilename(): string {
-		return $this->_file;
-	}
-
-	public function setFilename(string $file): void {
-		if ('' != $file && IO::indir($file)) {
-			$this->_file = strtr(realpath(dirname($file)).'/'.basename($file), '\\', '/');
+	public string $filename = '' {
+		set(string $file) {
+			if ('' != $file && IO::indir($file)) {
+				$this->filename = strtr(realpath(dirname($file)).'/'.basename($file), '\\', '/');
+			}
 		}
 	}
 }
