@@ -49,7 +49,7 @@ trait Replica {
 			$this->_save = Save::Nothing;
 
 			if ('' != $this->filename) {
-				(new Exporter($this->filename))->save(
+				new Exporter($this->filename)->save(
 					$this,
 					Core::message(
 						'src_header',

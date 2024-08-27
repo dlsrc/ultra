@@ -55,7 +55,7 @@ final class Log {
 
 		$mode = Mode::Develop(1, 1);
 
-		(new Exporter($file))->save(
+		new Exporter($file)->save(
 			$this->_saved,
 			Core::message(
 				'src_header',
