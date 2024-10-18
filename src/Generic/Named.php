@@ -40,15 +40,13 @@ trait Named {
 				return self::$_container[$name];
 			}
 
-			if (!is_object(self::$_container[$name])) {
-				unlink($file);
-				//return Error::log(Core::message('e_type', $file, gettype(self::$_container[$name])), Status::Domain);
-				Error::log(Core::message('e_type', $file, gettype(self::$_container[$name])), Status::Domain);
+			unlink($file);
+
+			if (is_object(self::$_container[$name])) {
+				Error::log(Core::message('e_class', $file, get_class(self::$_container[$name]), static::class), Status::Domain);
 			}
 			else {
-				unlink($file);
-				//return Error::log(Core::message('e_class', $file, get_class(self::$_container[$name]), static::class), Status::Domain);
-				Error::log(Core::message('e_class', $file, get_class(self::$_container[$name]), static::class), Status::Domain);
+				Error::log(Core::message('e_type', $file, gettype(self::$_container[$name])), Status::Domain);
 			}
 		}
 
@@ -75,7 +73,6 @@ trait Named {
 		}
 
 		if (!is_readable($file)) {
-			//return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
 			if ($log) {
 				Error::log('File "'.$file.'" not found or not readable.', Code::Nofile);
 			}
@@ -96,7 +93,6 @@ trait Named {
 			$message = 'Unexpected type: '.gettype(self::$_container[$name]).', expected '.static::class.'.';
 		}
 
-		//return new Fail(Status::Noobject, 'Unexpected object type.', __FILE__, __LINE__);
 		Error::log($message, Status::Noobject);
 		unset(self::$_container[$name]);
 		return null;

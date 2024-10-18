@@ -36,15 +36,13 @@ trait Nameless {
 				return self::$_container[static::class];
 			}
 
-			if (!is_object(self::$_container[static::class])) {
-				unlink($file);
-				//return Error::log(Core::message('e_type', $file, gettype(self::$_container[static::class])), Status::Domain);
-				Error::log(Core::message('e_type', $file, gettype(self::$_container[static::class])), Status::Domain);
+			unlink($file);
+
+			if (is_object(self::$_container[static::class])) {
+				Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
 			}
 			else {
-				unlink($file);
-				//return Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
-				Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
+				Error::log(Core::message('e_type', $file, gettype(self::$_container[static::class])), Status::Domain);
 			}
 		}
 
@@ -67,7 +65,6 @@ trait Nameless {
 		}
 
 		if (!is_readable($file)) {
-			//return new Fail(Code::Nofile, 'File "'.$file.'" not found or not readable.', __FILE__, __LINE__);
 			if ($log) {
 				Error::log('File "'.$file.'" not found or not readable.', Code::Nofile);
 			}
@@ -88,7 +85,6 @@ trait Nameless {
 			$message = 'Unexpected type: '.gettype(self::$_container[$name]).', expected '.static::class.'.';
 		}
 
-		//return new Fail(Status::Noobject, $message, __FILE__, __LINE__);
 		Error::log($message, Status::Noobject);
 		unset(self::$_container[static::class]);
 		return null;
