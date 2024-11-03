@@ -21,8 +21,6 @@ abstract class Dictionary implements Called, Exportable, Storable, Immutable, Im
 	use Replica;
 
 	protected function __construct(array $state = [], string $name = '') {
-		$this->_save = Save::Nothing;
-
 		if (empty($state)) {
 			if ('' == $name) {
 				$this->_name = get_class($this);

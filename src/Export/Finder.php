@@ -28,11 +28,11 @@ trait Finder {
 			return self::$_instance;
 		}
 
-		if (is_object(self::$_container[$name])) {
-			$message = 'Unexpected object type '.self::$_container[$name]::class.', expected '.static::class.'.';
+		if (is_object(self::$_instance)) {
+			$message = 'Unexpected object type '.get_class(self::$_instance).', expected '.static::class.'.';
 		}
 		else {
-			$message = 'Unexpected type: '.gettype(self::$_container[$name]).', expected '.static::class.'.';
+			$message = 'Unexpected type: '.gettype(self::$_instance).', expected '.static::class.'.';
 		}
 
 		Error::log($message, Status::Noobject);

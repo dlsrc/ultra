@@ -24,7 +24,7 @@ trait Replica {
 	 * Ultra\Save::Destruct;
 	 * Ultra\Save::Now;
 	 */
-	private Save $_save;
+	private Save $_save = Save::Nothing;
 
 	final public function __destruct() {
 		if (Save::Destruct == $this->_save) {
