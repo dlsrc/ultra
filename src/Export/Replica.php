@@ -6,8 +6,10 @@
  */
 namespace Ultra;
 
-use Ultra\Generic\Filename;
 use Ultra\Generic\Called;
+use Ultra\Generic\Filename;
+use Ultra\Generic\Immutable;
+use Ultra\Generic\Mutable;
 
 /**
  * Общая реализация интерфейса Ultra\Exportable.
@@ -78,10 +80,17 @@ trait Replica {
 			$up = new $type;
 		}
 
-		$up->filename = $this->filename;
+		if ($this instanceof Immutable) {
+			$up->filename = $this->filename;
 
-		foreach ($this->_property as $key => $val) {
-			$up->$key = $val;
+			if ($this instanceof Mutable) {
+				foreach ($this->_property as $key => $val) {
+					$up->$key = $val;
+				}
+			}
+		}
+		else {
+			
 		}
 
 		$up->save($save);
