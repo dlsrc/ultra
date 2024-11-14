@@ -18,8 +18,6 @@ abstract class Set implements Mutable, Exportable, Storable, ImportableNameless 
 	use Nameless;
 
 	protected function __construct(array $state = []) {
-		$this->_save = Save::Nothing;
-
 		if (empty($state)) {
 			$this->_file = '';
 			$this->initialize();

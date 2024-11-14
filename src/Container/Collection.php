@@ -24,8 +24,6 @@ abstract class Collection implements Called, Exportable, Storable, Extendable, I
 	use Replica;
 
 	protected function __construct(array $state = [], string $name = '') {
-		$this->_save = Save::Nothing;
-
 		if (empty($state)) {
 			if ('' == $name) {
 				$this->_name = get_class($this);
@@ -41,9 +39,9 @@ abstract class Collection implements Called, Exportable, Storable, Extendable, I
 			$this->_name = $state['_name'];
 			$this->_file = $state['_file'];
 
-			foreach ($state as $name => $value) {
-				if (property_exists($this, $name)) {
-					$this->$name = $value;
+			foreach ($state as $property => $value) {
+				if (property_exists($this, $property)) {
+					$this->$property = $value;
 				}
 			}
 		}
