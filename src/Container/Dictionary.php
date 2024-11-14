@@ -29,7 +29,6 @@ abstract class Dictionary implements Called, Exportable, Storable, Immutable, Im
 				$this->_name = $name;
 			}
 
-			$this->_file = '';
 			$this->initialize();
 		}
 		else {

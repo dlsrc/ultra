@@ -12,7 +12,7 @@ use Ultra\IO;
  * Реализация интерфейса Ultra\Property\Storable.
  */
 trait Filename {
-	private string $_file;
+	private string $_file = '';
 
 	public function getFilename(): string {
 		return $this->_file;

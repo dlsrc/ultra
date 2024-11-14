@@ -19,7 +19,6 @@ abstract class Set implements Mutable, Exportable, Storable, ImportableNameless 
 
 	protected function __construct(array $state = []) {
 		if (empty($state)) {
-			$this->_file = '';
 			$this->initialize();
 		}
 		else {

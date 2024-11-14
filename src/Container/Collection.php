@@ -32,13 +32,9 @@ abstract class Collection implements Called, Exportable, Storable, Extendable, I
 				$this->_name = $name;
 			}
 
-			$this->_file = '';
 			$this->initialize();
 		}
 		else {
-			$this->_name = $state['_name'];
-			$this->_file = $state['_file'];
-
 			foreach ($state as $property => $value) {
 				if (property_exists($this, $property)) {
 					$this->$property = $value;
