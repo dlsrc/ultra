@@ -242,7 +242,7 @@ final readonly class Error implements CallableState, State {
 		$context = '<- Error before or in the line '.$trace[0]['line'].
 		' in file "'.strtr($trace[0]['file'], '\\', '/').'"'."\n";
 
-		foreach (range(1, \array_key_last($trace)) as $i) {
+		foreach (range(1, array_key_last($trace)) as $i) {
 			if (empty($trace[$i]['args'])) {
 				$args = '()';
 			}
@@ -323,12 +323,12 @@ final readonly class Error implements CallableState, State {
 
 			if (isset($trace[$i]['line'])) {
 				$context = '// '.$call.' on line '.$trace[$i]['line'].' in file "'.
-				(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
+				(isset($trace[$i]['file']) ? strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
 				'"'."\n".$context;
 			}
 			else {
 				$context = '// '.$call.' in file "'.
-				(isset($trace[$i]['file']) ? \strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
+				(isset($trace[$i]['file']) ? strtr($trace[$i]['file'], '\\', '/') : 'Unknown file').
 				'"'."\n".$context;
 			}
 		}

@@ -379,7 +379,7 @@ final class Core implements Sociable {
 		}
 
 		foreach ($log->getKeys() as $id) {
-			if (!\in_array($log->getType($id), $type)) {
+			if (!in_array($log->getType($id), $type)) {
 				return true;
 			}
 		}
@@ -451,7 +451,7 @@ final class Core implements Sociable {
 			context: '['.$type->name.' #'.$e['type'].']',
 		);
 
-		\error_clear_last();
+		error_clear_last();
 
 		return $core;
 	}

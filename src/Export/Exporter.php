@@ -176,7 +176,7 @@ final class Exporter implements Storable {
 		}
 
 		if (!empty($direct)) {
-			$seek = '/('.\implode('|', \array_map(fn(string $text) => preg_quote($text), $direct)).')::__set_state/is';
+			$seek = '/('.implode('|', array_map(fn(string $text) => preg_quote($text), $direct)).')::__set_state/is';
 			$code = preg_replace($seek, 'new $1', $code);
 		}
 

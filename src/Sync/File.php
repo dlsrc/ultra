@@ -25,7 +25,7 @@ final class File extends Mutex {
 	 * По умолчанию, устанавливается путь до папки текущего файла.
 	 */
 	public function setpath(string $path, bool $check = false): void {
-		$path = \strtr($path, '\\', '/');
+		$path = strtr($path, '\\', '/');
 
 		if (!str_ends_with($path, '/')) {
 			$path.= '/';
