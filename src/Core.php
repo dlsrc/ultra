@@ -14,12 +14,8 @@ use Ultra\Generic\Informer;
 use Ultra\Generic\Sociable;
 
 final class Core implements Sociable {
+	use Singleton;
 	use Informer;
-
-	/**
-	 * Одиночный экземпляр \Ultra\Core.
-	 */
-	private static self|null $_core = null;
 
 	/**
 	 * Флаг консольного приложения.
@@ -121,14 +117,6 @@ final class Core implements Sociable {
 	 * Файл шаблона заголовков для генерируемых скриптов и экспортируемых переменных.
 	 */
 	private string $_header;
-
-	/**
-	 * Точка доступа к интерфейсу Ultra\Core.
-	 */
-	public static function get(): self {
-		self::$_core ??= self::_init();
-		return self::$_core;
-	}
 
 	/**
 	 * Выполняет сброс кеша байткода указанного скрипта или переменной, если скрипт или
@@ -426,6 +414,7 @@ final class Core implements Sociable {
 		return $this;
 	}
 
+	#[Initializer]
 	private static function _init(): self {
 		$core = new Core;
 		error_reporting(E_ALL);
