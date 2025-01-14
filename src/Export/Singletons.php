@@ -26,7 +26,7 @@ trait Singletons {
 			}
 		}
 
-		self::$_instance[static::class] = new static;
+		self::$_instance[static::class] ??= new static;
 		return self::$_instance[static::class];
 	}
 }
