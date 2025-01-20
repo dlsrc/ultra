@@ -11,9 +11,7 @@ use Ultra\Core;
 use Ultra\Error;
 use Ultra\Exportable;
 use Ultra\Instance;
-//use Ultra\Fail;
 use Ultra\Save;
-//use Ultra\State;
 use Ultra\Status;
 
 /**
@@ -52,7 +50,7 @@ trait Named {
 			}
 		}
 
-		self::$_container[$name] = new static([], $name);
+		self::$_container[$name] ??= new static([], $name);
 
 		if (self::$_container[$name] instanceof Storable) {
 			self::$_container[$name]->setFilename($file);

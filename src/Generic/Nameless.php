@@ -48,7 +48,7 @@ trait Nameless {
 			}
 		}
 
-		self::$_container[static::class] = new static;
+		self::$_container[static::class] ??= new static;
 
 		if (self::$_container[static::class] instanceof Storable) {
 			self::$_container[static::class]->setFilename($file);

@@ -88,27 +88,4 @@ trait Replica {
 		self::add($up, $name);
 		return $up;
 	}
-
-/*	final public function refind(): self {
-		if ($this instanceof Called) {
-			$name = $this->getName();
-			self::drop($name);
-
-			if (!$refind = self::find($this->_file, $name)) {
-				self::add($this, $name);
-				return $this;
-			}
-		}
-		else {
-			$name = get_class($this);
-			self::drop($name);
-
-			if (!$refind = self::find($this->_file)) {
-				self::add($this, $name);
-				return $this;
-			}
-		}
-
-		return $refind;
-	}*/
 }

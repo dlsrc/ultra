@@ -445,6 +445,7 @@ final class Boot {
 	 */
 	private function errorLoad(string $class): never {
 		Error::log(Core::message('e_load', $class), Status::Noclass, true);
+		exit;
 	}
 
 	/**

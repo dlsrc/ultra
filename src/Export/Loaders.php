@@ -33,7 +33,7 @@ trait Loaders {
 			}
 		}
 
-		self::$_instance[static::class] = new static;
+		self::$_instance[static::class] ??= new static;
 
 		if (self::$_instance[static::class] instanceof Storable) {
 			self::$_instance[static::class]->setFilename($file);
