@@ -1,6 +1,6 @@
 {
     "name": "ultra/core",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "type": "library",
     "description": "This package is a core part of the Ultra library.",
     "license": "MIT",
