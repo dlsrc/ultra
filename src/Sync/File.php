@@ -64,7 +64,7 @@ final class File extends Mutex {
 		}
 
 		if (!file_exists($this->sem)) {
-			if ((new Exporter($this->sem))->save(true, '', false)) {
+			if (new Exporter($this->sem)->save(true, '', false)) {
 				$this->status = true;
 			}
 		}
@@ -83,7 +83,7 @@ final class File extends Mutex {
 				return false;
 			}
 
-			if ((new Exporter($this->sem))->save(true, '', false)) {
+			if (new Exporter($this->sem)->save(true, '', false)) {
 				$this->status = true;
 			}
 		}
@@ -96,7 +96,7 @@ final class File extends Mutex {
 	 */
 	public function release(): bool {
 		if ($this->status) {
-			if ((new Exporter($this->sem))->save(false, '', false)) {
+			if (new Exporter($this->sem)->save(false, '', false)) {
 				$this->status = false;
 				return true;
 			}

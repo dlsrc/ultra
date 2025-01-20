@@ -299,7 +299,7 @@ final class Boot {
 
 		$mode = Mode::Develop->setMain();
 
-		(new Exporter($this->registry.self::WHOLE_MAP))->save(
+		new Exporter($this->registry.self::WHOLE_MAP)->save(
 			$this->involved[self::WHOLE_MAP],
 			Core::pattern('src_header')->replace(
 				$this->modified[self::WHOLE_MAP],

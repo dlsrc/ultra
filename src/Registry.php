@@ -26,7 +26,7 @@ final class Registry {
 			return;
 		}
 /*
-		(new Registry)->create($b);
+		new Registry->create($b);
 		self::$_done = true;
 		return;
 */
@@ -55,7 +55,7 @@ final class Registry {
 		}
 
 		if ($mtx->acquire()) {
-			(new Registry)->create($b);
+			new Registry()->create($b);
 			self::$_done = true;
 			$mtx->release();
 			return;
