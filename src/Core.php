@@ -34,14 +34,11 @@ final class Core implements Sociable {
 	public readonly bool $opcache;
 
 	/**
-	 * Строковый идентификатор фатальной ошибки. Значением по умолчанию является пустая строка.
-	 * При возникновении фатальной ошибки после ее регистрации в журнале событий полю
-	 * присваивается идентификатор ошибки, после чего вызывается функция exit() и выполнение
-	 * приложения прекращается.
-	 * Поле управляет вызовом замыкания, которое предназначено для случая фатальной ошибки
-	 * и вызывается в функции завершения работы.
+	 * Объект, управляющий завершающими функциями и инициализируемый по требованию.
 	 */
-	private string $_fatal;
+	public private(set) ?Shutdown $shutdown = null {
+		get => $this->shutdown ?? ($this->shutdown = new Shutdown);
+	}
 
 	/**
 	 * Флаг состояния сбоя. Значение по умолчанию FALSE.
@@ -78,40 +75,6 @@ final class Core implements Sociable {
 	 * случае будет происходить при каждом возникновении ошибки.
 	 */
 	private int $_frequency;
-
-	/**
-	 * Флаг установки завершающей функции. По умолчанию FALSE.
-	 * Становится TRUE когда регистрируется хотя-бы одно из замыканий в качестве завершающей
-	 * функции.
-	 */
-	private bool $_shutdown;
-
-	/**
-	 * Завершающая функция, вызываемая в случае фатальной ошибки.
-	 * В качестве аргумента функция может принимать сам объект фатальной ошибки.
-	 */
-	private Closure|null $_error;
-
-	/**
-	 * Завершающая функция, вызываемая в случае остановки по таймауту.
-	 */
-	private Closure|null $_timeout;
-
-	/**
-	 * Завершающая функция, вызываемая в случае прерывания исполнения.
-	 */
-	private Closure|null $_aborted;
-
-	/**
-	 * Флаг выполнения завершающей функции в случае прерывания пользователем исполнения
-	 * приложения.
-	 * Если параметр php.ini ignore_user_abort установлен в значение TRUE, то завершающая
-	 * функция self::$_aborted по умолчанию исполняться не будет.
-	 * Если параметр ignore_user_abort установлен в значение FALSE, либо флаг $_ignore
-	 * установлен в TRUE, завершающая функция self::$_aborted будет вызвана, даже если
-	 * ignore_user_abort установлен в значение TRUE.
-	 */
-	private bool $_ignore;
 
 	/**
 	 * Файл шаблона заголовков для генерируемых скриптов и экспортируемых переменных.
@@ -306,7 +269,7 @@ final class Core implements Sociable {
 		$this->_failure  = true;
 
 		if ($e->fatal) {
-			$this->_fatal = $e->id;
+			$this->shutdown->fatal = $e;
 			exit();
 		}
 	}
@@ -375,45 +338,6 @@ final class Core implements Sociable {
 		return false;
 	}
 
-	public function shutdown(
-		Closure|null $error   = null,
-		Closure|null $timeout = null,
-		Closure|null $aborted = null, bool $ignore = false,
-	): self {
-		if (null != $error) {
-			$this->error($error);
-		}
-
-		if (null != $timeout) {
-			$this->timeout($timeout);
-		}
-
-		if (null != $aborted) {
-			$this->aborted($aborted, $ignore);
-		}
-
-		return $this;
-	}
-
-	public function error(Closure $error): self {
-		$this->_shutdownStart();
-		$this->_error = $error;
-		return $this;
-	}
-
-	public function timeout(Closure $timeout): self {
-		$this->_shutdownStart();
-		$this->_timeout = $timeout;
-		return $this;
-	}
-
-	public function aborted(Closure $aborted, bool $ignore = false): self {
-		$this->_shutdownStart();
-		$this->_aborted = $aborted;
-		$this->_ignore = $ignore;
-		return $this;
-	}
-
 	#[Initializer]
 	private static function _init(): self {
 		$core = new Core;
@@ -460,36 +384,7 @@ final class Core implements Sociable {
 		$this->_logfile   = '';
 		$this->_frequency = 1;
 		$this->_header    = dirname(__DIR__).'/header.txt';
-		$this->_shutdown  = false;
-		$this->_fatal     = '';
 		$this->_failure   = false;
-		$this->_ignore    = false;
-		$this->_error     = null;
-		$this->_timeout   = null;
-		$this->_aborted   = null;
-	}
-
-	private function _shutdownHandler(): void {
-		if (null != $this->_error && '' != $this->_fatal) {
-			($this->_error)(Log::get()->getError($this->_fatal));
-		}
-
-		if (null != $this->_aborted
-		&& 1 == connection_aborted()
-		&& ($this->_ignore || !ini_get('ignore_user_abort'))) {
-			($this->_aborted)();
-		}
-
-		if (null != $this->_timeout && connection_status() > 1) {
-			($this->_timeout)();
-		}
-	}
-
-	private function _shutdownStart(): void {
-		if (!$this->_shutdown) {
-			$this->_shutdown = true;
-			register_shutdown_function($this->_shutdownHandler(...));
-		}
 	}
 
 	/**
