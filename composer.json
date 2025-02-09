@@ -1,6 +1,6 @@
 {
     "name": "ultra/core",
-    "version": "2.0.0-beta1",
+    "version": "2.0.0",
     "type": "library",
     "description": "This package is a core part of the Ultra library.",
     "license": "MIT",
@@ -24,7 +24,7 @@
     },
     "require": {
         "php": ">=8.4",
-        "ultra/result": "^1.3.0",
+        "ultra/result": "^1.4.0",
         "ultra/enum-dominant": "^1.0.0"
     }
 }
