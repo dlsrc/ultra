@@ -225,6 +225,8 @@ final class Registry {
 		include_once $ultra_path.'/enum-dominant/src/BackedDominantCase.php';
 	  //  include_once $ultra_path.'/core/src/Boot.php';
 		include_once $ultra_path.'/core/src/Export/CallableState.php';
+		include_once $ultra_path.'/core/src/Export/Initializer.php';
+		include_once $ultra_path.'/core/src/Export/Singleton.php';
 	  //  include_once $ultra_path.'/chars/src/Key.php';
 	  //  include_once $ultra_path.'/chars/src/Transform.php';
 	  //  include_once $ultra_path.'/chars/src/Translit.php';
@@ -258,6 +260,7 @@ final class Registry {
 		include_once $ultra_path.'/core/src/Generic/Template.php';
 		include_once $ultra_path.'/core/src/Export/SetState.php';
 		include_once $ultra_path.'/core/src/Export/SetStateDirectly.php';
+		include_once $ultra_path.'/core/src/Shutdown.php';
 	  //  include_once $ultra_path.'/core/src/Export/Replica.php';
 		include_once $ultra_path.'/core/src/Core.php';
 		include_once $ultra_path.'/result/src/Suspense.php';
