@@ -34,6 +34,54 @@ final class Core implements Sociable {
 	public readonly bool $opcache;
 
 	/**
+	 * Виртуальный флаг логируемости ошибки в зависимости от режима запуска
+	 * и частотности обновления лога.
+	 */
+	public bool $logable {
+		get {
+			if (
+				1 == $this->_frequency
+				|| mt_rand(1, $this->_frequency) == $this->_frequency
+				|| Mode::Develop()
+				|| $this->cli
+			) {
+				return true;
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Путь к исполняемому файлу журнала.
+	 * Исполняемый файл PHP, содержащий экспортированный массив объектов ошибок и сообщений.
+	 * Массив объектов ошибок можно присвоить переменной, подключив файл журнала директивой
+	 * include:
+	 * $log = include $this->logfile;
+	 */
+	public string $logfile {
+		get {
+			if ('' == $this->logfile) {
+				return dirname(realpath($_SERVER['SCRIPT_FILENAME'])).'/ultra_log.php';
+			}
+
+			return $this->logfile;
+		}
+
+		set {
+			if ('' == $value) {
+				$this->logfile = '';
+			}
+			elseif (!$value = realpath($value)) {
+				$this->logfile = '';
+			}
+			else {
+				$this->logfile = $value;
+			}
+		}
+	}
+
+	/**
 	 * Объект, управляющий завершающими функциями и инициализируемый по требованию.
 	 */
 	public private(set) ?Shutdown $shutdown = null {
@@ -48,15 +96,6 @@ final class Core implements Sociable {
 	 * Ultra\Core->registerFailure().
 	 */
 	private bool $_failure;
-
-	/**
-	 * Путь к исполняемому файлу журнала.
-	 * Исполняемый файл PHP, содержащий экспортированный массив объектов ошибок и сообщений.
-	 * Массив объектов ошибок можно присвоить переменной, подключив файл журнала директивой
-	 * include:
-	 * $log = include $this->_logfile;
-	 */
-	private string $_logfile;
 
 	/**
 	 * Частота сверки журнала событий в случае ошибок.
@@ -127,7 +166,7 @@ final class Core implements Sociable {
 	public function listen(
 		Closure|null|true $error_handler     = true,
 		Closure|null|true $exception_handler = true,
-	): self {
+	): void {
 		if (true === $error_handler) {
 			set_error_handler($this->_errorHandler(...));
 		}
@@ -145,23 +184,19 @@ final class Core implements Sociable {
 		else {
 			set_exception_handler($exception_handler);
 		}
-
-		return $this;
 	}
 
 	/**
 	 * Прекратить прослушивание и перехват ошибок и исключений.
 	 * Аналогично вызову $core->listen(NULL, NULL);.
 	 */
-	public function stopListen(): self {
+	public function stopListen(): void {
 		$prev = set_error_handler(null);
 		set_exception_handler(null);
 		
 		if (!is_null($prev)) {
 			error_clear_last();
 		}
-
-		return $this;
 	}
 
 	/**
@@ -182,44 +217,16 @@ final class Core implements Sociable {
 	/**
 	 * Установка файла, содержашего шаблон заголовков для экспортируемых файлов исходного кода.
 	 */
-	public function setHeader(string $file): self {
+	public function setHeader(string $file): void {
 		if ('' == $file) {
-			if ('' == $this->_header) {
-				return $this;
-			}
+			$this->_header = '';
 		}
-		elseif (!is_readable($file)) {
-			if ('' == $this->_header) {
-				return $this;
-			}
+		elseif (!$file = realpath($file)) {
+			$this->_header = '';
 		}
 		else {
 			$this->_header = $file;
 		}
-
-		return $this;
-	}
-
-	/**
-	 * Получение пути к файлу журнала событий.
-	 */
-	public function getLogfile(): string {
-		if ('' != $this->_logfile) {
-			return $this->_logfile;
-		}
-
-		return dirname(realpath($_SERVER['SCRIPT_FILENAME'])).'/ultra_log.php';
-	}
-
-	/**
-	 * Установка имени файла журнала событий.
-	 */
-	public function logfile(string $file): self {
-		if ('' != $file) {
-			$this->_logfile = $file;
-		}
-
-		return $this;
 	}
 
 	/**
@@ -236,9 +243,9 @@ final class Core implements Sociable {
 	 * Рекомендуется установить значение частоты фиксации ошибок равное среднему количеству
 	 * запросов к приложению в течении 10-20 минут, но не более 1000.
 	 */
-	 public function frequency(int $frequency): self {
+	 public function frequency(int $frequency): void {
 		if ($this->cli) {
-			return $this;
+			return;
 		}
 
 		if ($frequency < 1) {
@@ -249,20 +256,6 @@ final class Core implements Sociable {
 		}
 
 		$this->_frequency = $frequency;
-		return $this;
-	}
-
-	public function logable(): bool {
-		if (
-			1 == $this->_frequency
-			|| mt_rand(1, $this->_frequency) == $this->_frequency
-			|| Mode::Develop()
-			|| $this->cli
-		) {
-			return true;
-		}
-
-		return false;
 	}
 
 	public function catchError(Error $e): void {
@@ -381,7 +374,7 @@ final class Core implements Sociable {
 			$this->opcache = ('1' == ini_get('opcache.enable'));
 		}
 
-		$this->_logfile   = '';
+		$this->logfile    = '';
 		$this->_frequency = 1;
 		$this->_header    = dirname(__DIR__).'/header.txt';
 		$this->_failure   = false;

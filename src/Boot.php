@@ -151,16 +151,9 @@ final class Boot {
 	 * $load - флаг немедленной загрузки всех классов перечисленных в ветке. По умолчанию
 	 * FALSE - классы загружаются по требованию (__autoload()).
 	 */
-	public static function branch(string $name, bool $load = false): void {
+	public static function branch(string $name): void {
 		if (self::$_boot) {
 			self::$_boot->changeBranch($name);
-
-			//if ($load) {
-				// TODO: Необходимо до возврата из веток карт памяти
-				// добавлять блок с включениями файлов в правильном порядке.
-				// Порядок подключений файлов важен.
-				//self::$_boot->includeBranch();
-			//}
 		}
 	}
 
@@ -468,22 +461,6 @@ final class Boot {
 			$this->involved[$this->branch_file] = [];
 		}
 	}
-
-	/**
-	 * Подключить все файлы перечисленные в ветке
-	 * Вызывается из Ultra\Boot::branch().
-	 */
-	//public function includeBranch(): void {
-		// Метод больше не имеет смысла.
-		// Останется заглушка до завершения описанного
-		// в методе Boot::branch().
-		//return;
-		/*foreach ($this->involved[$this->branch_file] as $file) {
-			if (file_exists($file)) {
-				include_once $file;
-			}
-		}*/
-	//}
 
 	/**
 	 * Вернуть полный путь к файлу указанного класса или пустую строку, если класс не загружен.

@@ -32,10 +32,10 @@ final class Log {
 		}
 
 		$core = Core::get();
-		$file = $core->getLogfile();
+		$file = $core->logfile;
 
 		if (is_file($file)) {
-			if (!$core->logable() || !is_writable($file)) {
+			if (!$core->logable || !is_writable($file)) {
 				return;
 			}
 
@@ -148,7 +148,7 @@ final class Log {
 	}
 
 	public function getSavedKeys(): array {
-		if (!$this->loaded(Core::get()->getLogfile())) {
+		if (!$this->loaded(Core::get()->logfile)) {
 			return [];
 		}
 

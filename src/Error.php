@@ -231,7 +231,7 @@ final readonly class Error implements CallableState, State {
 	 */
 	private static function _prepareContext(array $trace): string {
 		if (!isset($trace[1])) {
-			if (is_string($trace[0]['file'])) {
+			if (isset($trace[0]['file']) && is_string($trace[0]['file'])) {
 				return 'Error before or in the line '.$trace[0]['line'].
 				' in file "'.strtr($trace[0]['file'], '\\', '/').'"';
 			} else {
