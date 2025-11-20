@@ -72,7 +72,7 @@ final class Core implements Sociable {
 			if ('' == $value) {
 				$this->logfile = '';
 			}
-			elseif (!$value = realpath($value)) {
+			elseif (!IO::indir($value)) {
 				$this->logfile = '';
 			}
 			else {
