@@ -1,5 +1,5 @@
 /**
- *  (c) 2005-{1} Dmitry Lebedev <dl@adios.ru>
+ *  (c) 2005-{1} Dmitry Lebedev <dlsrc.extra@gmail.com>
  *  ----------------------------------------------------------------------------------------
  *  This source code was generated and exported to this file using the Ultra core library.
  *  For copyright and licensing information for Ultra core library, see the LICENSE file at
