@@ -13,6 +13,18 @@ trait Getter {
 	abstract protected function initialize(): void;
 	protected array $_property = [];
 
+	final public function getProperty(string $name): mixed {
+		if (isset($this->_property[$name])) {
+			return $this->_property[$name];
+		}
+
+		return null;
+	}
+	
+	final public function getPropertyNames(): array {
+		return array_keys($this->_property);
+	}
+
 	final public function __get(string $name): mixed {
 		if (isset($this->_property[$name])) {
 			return $this->_property[$name];

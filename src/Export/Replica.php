@@ -16,6 +16,10 @@ trait Replica {
 	use Filename;
 	use SetState;
 
+	abstract public static function add(self $container, string $name = '', bool $update = true): bool;
+	abstract public function getProperty(string $name): mixed;
+	abstract public function getPropertyNames(): array;
+
 	/**
 	 * Флаг состояния объекта, указывающий на необходимость экспорта.
 	 * Принимает одно из значений:
@@ -80,8 +84,8 @@ trait Replica {
 
 		$up->setFilename($this->_file);
 
-		foreach ($this->_property as $key => $val) {
-			$up->$key = $val;
+		foreach ($this->getPropertyNames() as $key) {
+			$up->setProperty($key, $this->getProperty($key));
 		}
 
 		$up->save($save);

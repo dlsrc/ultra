@@ -12,6 +12,15 @@ namespace Ultra\Generic;
 trait Setter {
 	use Getter;
 
+	final public function setProperty(string $name, mixed $value): bool {
+		if (isset($this->_property[$name])) {
+			$this->_property[$name] = $value;
+			return true;
+		}
+
+		return false;
+	}
+
 	final public function __set(string $name, mixed $value): void {
 		if (isset($this->_property[$name])) {
 			$this->_property[$name] = $value;

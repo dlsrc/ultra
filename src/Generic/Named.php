@@ -21,6 +21,9 @@ use Ultra\Status;
 trait Named {
 	use Instance;
 	use NamedGetter;
+
+	abstract public function getName(): string;
+	abstract public function getFilename(): string;
 	
 	final public static function load(string $file, string $name = ''): static {
 		if ('' == $name) {
@@ -104,7 +107,7 @@ trait Named {
 		$name = $this->getName();
 		self::drop($name);
 
-		if (!$refind = self::find($this->_file, $name, true)) {
+		if (!$refind = self::find($this->getFilename(), $name, true)) {
 			self::add($this, $name);
 			return $this;
 		}

@@ -24,6 +24,8 @@ trait Nameless {
 	use Instance;
 	use NamelessGetter;
 
+	abstract public function getFilename(): string;
+
 	final public static function load(string $file): static {
 		if (isset(self::$_container[static::class])) {
 			return self::$_container[static::class];
@@ -98,7 +100,7 @@ trait Nameless {
 		$name = get_class($this);
 		self::drop($name);
 
-		if (!$refind = self::find($this->_file, true)) {
+		if (!$refind = self::find($this->getFilename(), true)) {
 			self::add($this, $name);
 			return $this;
 		}
