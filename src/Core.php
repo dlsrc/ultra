@@ -248,14 +248,7 @@ final class Core implements Sociable {
 			return;
 		}
 
-		if ($frequency < 1) {
-			$frequency = 1;
-		}
-		elseif ($frequency > 1000) {
-			$frequency = 1000;
-		}
-
-		$this->_frequency = $frequency;
+		$this->_frequency = clamp($frequency, 1, 1000);
 	}
 
 	public function catchError(Error $e): void {
