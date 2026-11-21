@@ -48,6 +48,8 @@ trait Nameless {
 				//return Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
 				Error::log(Core::message('e_class', $file, get_class(self::$_container[static::class]), static::class), Status::Domain);
 			}
+
+			unset(self::$_container[$name]);
 		}
 
 		self::$_container[static::class] ??= new static;

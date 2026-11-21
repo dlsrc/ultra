@@ -51,6 +51,8 @@ trait Named {
 				//return Error::log(Core::message('e_class', $file, get_class(self::$_container[$name]), static::class), Status::Domain);
 				Error::log(Core::message('e_class', $file, get_class(self::$_container[$name]), static::class), Status::Domain);
 			}
+
+			unset(self::$_container[$name]);
 		}
 
 		self::$_container[$name] ??= new static([], $name);
