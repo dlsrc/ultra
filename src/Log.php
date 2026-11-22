@@ -156,7 +156,7 @@ final class Log {
 		return array_keys($this->_saved);
 	}
 
-	private function loaded($file): bool {
+	private function loaded(string $file): bool {
 		if (is_null($this->_saved)) {
 			if (!is_readable($file)) {
 				return false;
